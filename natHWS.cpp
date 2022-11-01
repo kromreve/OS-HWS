@@ -6,6 +6,17 @@ using namespace std;
 vector<process> allProcess;
 string stringLine;
 
+typedef struct process{
+	int pid; 			 
+	int burst;
+    	int arrival;
+	int priority; 	
+	int deadline;
+    	int io;
+} Process;
+
+
+void delimit(std::string line, int pvalues[] );
 
 int main(){
   
@@ -29,8 +40,8 @@ int main(){
 						current.burst = pvalues[1];
 						current.arrival = pvalues[2];
 						current.priority = pvalues[3];
-            current.deadline = pvalues[4];
-            current.io = pvalues[5];
+            					current.deadline = pvalues[4];
+            					current.io = pvalues[5];
 
 						allProcess.push_back(pvalues);	
 				}
