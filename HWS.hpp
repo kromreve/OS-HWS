@@ -10,4 +10,4 @@ typedef struct process{
 } Process;
 
 
-void getLine(std::string line, int pvalues[] );
+void delimit(std::string line, int pvalues[] );
