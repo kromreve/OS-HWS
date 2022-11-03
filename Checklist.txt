@@ -1,8 +1,0 @@
-I. Sanitize input
-    1.
-II. Interpret input
-    2.
-III. Promotion/Demotion
-    1. Red-black Tree data structure
-IV. Round-robin Research
-V. Gannt
