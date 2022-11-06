@@ -418,11 +418,13 @@ int main() {
 	bt.insert(5);
 	bt.insert(15);
 	bt.insert(17);
+    bt.insert(20);
+    bt.insert(123);
 	bt.insert(25);
 	bt.insert(40);
 	bt.insert(80);
 	bt.deleteNode(25);
     bt.formatPrint();
-    bt.preOrder();
+    bt.inOrder();
     return 0;
 }
