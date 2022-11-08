@@ -8,6 +8,7 @@
 using namespace std;
 
 int numNegatives = 0;
+int tq;
 
 vector<vector<int>> readInput(const string filename){
     string line;
@@ -58,7 +59,7 @@ void printBurst(vector<vector<int>> input){
 
 vector<vector<int>> menu(vector<vector<int>> processes){
     char yn;
-    int numProcesses, bst, arr, pri, dline, io, tq;
+    int numProcesses, bst, arr, pri, dline, io;
     cout << "Would you like to add any additional processes? (Y/N): ";
     cin >> yn;
     if(yn == 'y'){
@@ -108,20 +109,19 @@ void waitingTime(vector<vector<int>> processes, int n,
     // Make a copy of burst times bt[] to store remaining
     // burst times.
     int rem_bt[n];
-    for (int i = 0 ; i < n ; i++)
+    for (int i = 0 ; i < n ; i++){
         rem_bt[i] = bt[i];
  
     int t = 0; // Current time
-
+    
     //do stuff here
-
+    }
 }
 
 void turnAroundTime(vector<vector<int>> processes, int numProcesses,
                         int bt[], int wt[], int tat[])
 {
-    // calculating turnaround time by adding
-    // bt[i] + wt[i]
+    
     for (int i = 0; i < numProcesses ; i++)
         tat[i] = bt[i] + wt[i];
 }
@@ -132,10 +132,8 @@ void findavgTime(vector<vector<int>> processes, int n, int bt[],
 {
     int wt[n], tat[n], total_wt = 0, total_tat = 0;
  
-    // Function to find waiting time of all processes
     waitingTime(processes, n, bt, wt, quantum);
  
-    // Function to find turn around time for all processes
     turnAroundTime(processes, n, bt, wt, tat);
  
  
@@ -152,6 +150,33 @@ void findavgTime(vector<vector<int>> processes, int n, int bt[],
         << (float)total_tat / (float)n;
 }
 
+bool compareArrival(vector<int> a, vector<int> b) {
+		if (a[2] < b[2]) {
+				return 1;
+		}
+		else {
+				return 0;
+		}
+}
+
+bool comparePriority(vector<int> a, vector<int> b) {
+		if (a[3] < b[3]) {
+				return 1;
+		}
+		else {
+				return 0;
+		}
+}
+
+bool compareDeadline(vector<int> a, vector<int> b) {
+		if (a[4] < b[4]) {
+				return 1;
+		}
+		else {
+				return 0;
+		}
+}
+
 int main(int argc,  char **argv){
     string processes=argv[1];
     vector<vector<int>> input = readInput(processes);
@@ -166,10 +191,16 @@ int main(int argc,  char **argv){
 			queue<vector<int>> temp;
 			allQueues.push_back(temp);
 
-            if(input[i][3] == i){
-                temp.push(input[i]);
+        for(int j=0; j<numProcesses; j++){
+            if(input[j][3] == i){
+                temp.push(input[j]);
              }
+        }
 	}
+
+    sort(input.begin(), input.end(), compareArrival);
+
+    
 
 
 
@@ -179,8 +210,7 @@ int main(int argc,  char **argv){
     }
  
     // Time quantum
-    int quantum = 2;
-    findavgTime(input, numProcesses, burstTimes, quantum);
+    findavgTime(input, numProcesses, burstTimes, tq);
     return 0;
 }
 
