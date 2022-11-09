@@ -5,6 +5,7 @@
 #include <regex>
 #include <sstream>
 #include <queue>
+#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -34,7 +35,7 @@ vector<vector<int>> readInput(const string filename){
             }
             row.push_back(value);
         }
-        if(!negative){
+        if(!negative && row[2] < row[4]){
             lines.push_back(row);
         }
         negative = false;
@@ -103,8 +104,9 @@ vector<vector<int>> menu(vector<vector<int>> processes){
     return processes;
 }
 
+
 void waitingTime(vector<vector<int>> processes, int n,
-            int bt[], int wt[], int quantum)
+            vector<int> bt, vector<int> wt, int quantum)
 {
     // Make a copy of burst times bt[] to store remaining
     // burst times.
@@ -119,7 +121,7 @@ void waitingTime(vector<vector<int>> processes, int n,
 }
 
 void turnAroundTime(vector<vector<int>> processes, int numProcesses,
-                        int bt[], int wt[], int tat[])
+                        vector<int> bt, vector<int> wt, vector<int> tat)
 {
     
     for (int i = 0; i < numProcesses ; i++)
@@ -127,10 +129,12 @@ void turnAroundTime(vector<vector<int>> processes, int numProcesses,
 }
 
 
-void findavgTime(vector<vector<int>> processes, int n, int bt[],
+void findavgTime(vector<vector<int>> processes, int n, vector<int> bt,
                                     int quantum)
 {
-    int wt[n], tat[n], total_wt = 0, total_tat = 0;
+    vector<int> wt;
+    vector<int> tat;
+    int total_wt = 0, total_tat = 0;
  
     waitingTime(processes, n, bt, wt, quantum);
  
@@ -189,13 +193,13 @@ int main(int argc,  char **argv){
 
     for (int i = 0; i <= 99; i++) {
 			queue<vector<int>> temp;
-			allQueues.push_back(temp);
 
         for(int j=0; j<numProcesses; j++){
             if(input[j][3] == i){
                 temp.push(input[j]);
              }
         }
+        allQueues.push_back(temp);
 	}
 
     sort(input.begin(), input.end(), compareArrival);
@@ -204,12 +208,11 @@ int main(int argc,  char **argv){
 
 
 
-    int burstTimes[] = {};
+    vector <int> burstTimes;
     for(int i=0; i< numProcesses; i++){
         burstTimes[i] = input[i][1];
     }
  
-    // Time quantum
     findavgTime(input, numProcesses, burstTimes, tq);
     return 0;
 }
