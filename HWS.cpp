@@ -35,7 +35,7 @@ vector<vector<int>> readInput(const string filename){
             }
             row.push_back(value);
         }
-        if(!negative && row[2] < row[4]){
+        if(!negative || row[2] < row[4]){
             lines.push_back(row);
         }
         negative = false;
@@ -204,7 +204,34 @@ int main(int argc,  char **argv){
 
     sort(input.begin(), input.end(), compareArrival);
 
-    
+    int clockTicks = 0, iterator = 0;
+    vector<vector<int>> currentProcesses;
+
+    while(1){
+        while (input[iterator][0] != '\0') { 																		
+				if (input[iterator][2] == clockTicks) {	//arrival											
+						currentProcesses.push_back(input[iterator]);										
+						iterator++;	
+                        //print the process arriving in the chart																														//
+				}
+                else if (input[iterator][4] == clockTicks){ //reaches deadline
+                    //deadline reached; demotion?
+                    //print the process reaching its deadline
+                    remove(input.begin(), input.end(), input[iterator]);
+                    iterator++;
+                }	
+                else if(input[iterator][2] + tq >= clockTicks){
+                    //demotion (remove from current priority queue and put into a lower one)
+                    //print the process expiring
+                    remove(input.begin(), input.end(), input[iterator]);
+                    iterator++;
+                }																																				
+                																																					//
+		}	
+
+
+    clockTicks++;
+    }
 
 
 
