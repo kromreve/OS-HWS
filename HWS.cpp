@@ -212,6 +212,7 @@ int main(int argc,  char **argv){
 				if (input[iterator][2] == clockTicks) {	//arrival											
 						currentProcesses.push_back(input[iterator]);										
 						iterator++;	
+                        cout << "Process " << iterator << " arrives";
                         //print the process arriving in the chart																														//
 				}
                 else if (input[iterator][4] == clockTicks){ //reaches deadline
@@ -219,16 +220,17 @@ int main(int argc,  char **argv){
                     //print the process reaching its deadline
                     remove(input.begin(), input.end(), input[iterator]);
                     iterator++;
+                    cout << "Process " << iterator << " expires";
                 }	
                 else if(input[iterator][2] + tq >= clockTicks){
                     //demotion (remove from current priority queue and put into a lower one)
                     //print the process expiring
                     remove(input.begin(), input.end(), input[iterator]);
                     iterator++;
+                    cout << "Process " << iterator << " time quantum expires";
                 }																																				
                 																																					//
 		}	
-
 
     clockTicks++;
     }
