@@ -19,6 +19,7 @@ vector<vector<int>> readInput(const string filename){
     regex regexp("[^0-9 \t-]");
     bool negative;
     
+    getline(file, line);
     while(getline(file,line)){
         string trimmedLine = regex_replace(line, regexp, "");
          
@@ -35,7 +36,8 @@ vector<vector<int>> readInput(const string filename){
             }
             row.push_back(value);
         }
-        if(!negative || row[2] < row[4]){
+        
+        if(!negative && (row[2] < row[4])){
             lines.push_back(row);
         }
         negative = false;
@@ -50,6 +52,7 @@ void print(vector<vector<int>> input){
             cout << input[i][j] << ' ';
         }
     }
+    cout << '\n';
 }
 
 void printBurst(vector<vector<int>> input){
@@ -140,8 +143,6 @@ void findavgTime(vector<vector<int>> processes, int n, vector<int> bt,
  
     turnAroundTime(processes, n, bt, wt, tat);
  
- 
-    
     for (int i=0; i<n; i++)
     {
         total_wt = total_wt + wt[i];
@@ -182,8 +183,10 @@ bool compareDeadline(vector<int> a, vector<int> b) {
 }
 
 int main(int argc,  char **argv){
+    //cout << "I am line 188" << '\n';
     string processes=argv[1];
     vector<vector<int>> input = readInput(processes);
+    //cout << "I am line 191" << '\n';
     print(menu(input));
     //cout << input[2][0];
     //printBurst(input);
@@ -212,7 +215,7 @@ int main(int argc,  char **argv){
 				if (input[iterator][2] == clockTicks) {	//arrival											
 						currentProcesses.push_back(input[iterator]);										
 						iterator++;	
-                        cout << "Process " << iterator << " arrives";
+                        cout << "Process " << iterator << " arrives" << '\n';
                         //print the process arriving in the chart																														//
 				}
                 else if (input[iterator][4] == clockTicks){ //reaches deadline
@@ -220,22 +223,19 @@ int main(int argc,  char **argv){
                     //print the process reaching its deadline
                     remove(input.begin(), input.end(), input[iterator]);
                     iterator++;
-                    cout << "Process " << iterator << " expires";
+                    cout << "Process " << iterator << " expires" << '\n';
                 }	
                 else if(input[iterator][2] + tq >= clockTicks){
                     //demotion (remove from current priority queue and put into a lower one)
                     //print the process expiring
                     remove(input.begin(), input.end(), input[iterator]);
                     iterator++;
-                    cout << "Process " << iterator << " time quantum expires";
-                }																																				
-                																																					//
+                    cout << "Process " << iterator << " time quantum expires" << '\n';
+                }
 		}	
 
     clockTicks++;
-    }
-
-
+    } 
 
     vector <int> burstTimes;
     for(int i=0; i< numProcesses; i++){
