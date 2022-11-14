@@ -9,7 +9,8 @@
 using namespace std;
 
 int numNegatives = 0;
-int tq;
+int tq, age;
+
 
 vector<vector<int>> readInput(const string filename){
     string line;
@@ -94,11 +95,15 @@ vector<vector<int>> menu(vector<vector<int>> processes){
 
         cout << "Enter the time quantum: ";
         cin >> tq;
+        cout << "Enter the aging timer: ";
+        cin >> age;
         cout << "Processes Added.";
 
     } else if(yn == 'n'){
         cout << "Enter the time quantum: ";
         cin >> tq;
+        cout << "Enter the aging timer: ";
+        cin >> age;
     } else {
         cout << "Invlaid input";
     }
@@ -187,6 +192,7 @@ int main(int argc,  char **argv){
     string processes=argv[1];
     vector<vector<int>> input = readInput(processes);
     //cout << "I am line 191" << '\n';
+    sort(input.begin(), input.end(), compareArrival);
     print(menu(input));
     //cout << input[2][0];
     //printBurst(input);
@@ -205,37 +211,62 @@ int main(int argc,  char **argv){
         allQueues.push_back(temp);
 	}
 
-    sort(input.begin(), input.end(), compareArrival);
 
     int clockTicks = 0, iterator = 0;
     vector<vector<int>> currentProcesses;
+    int size = input.size();
+    
 
+   // while(input[size-1][4] <= clockTicks){
     while(1){
-        while (input[iterator][0] != '\0') { 																		
-				if (input[iterator][2] == clockTicks) {	//arrival											
-						currentProcesses.push_back(input[iterator]);										
-						iterator++;	
-                        cout << "Process " << iterator << " arrives" << '\n';
+        	
+        for(int i =0; i< input.size(); i++) {															
+				if (input[iterator][2] == clockTicks) {	//arrival
+                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';											
+						currentProcesses.push_back(input[iterator]);											
+                        cout << "Process " << input[iterator][0] << " arrives" << '\n';
+                        iterator++;
+                        
                         //print the process arriving in the chart																														//
 				}
                 else if (input[iterator][4] == clockTicks){ //reaches deadline
-                    //deadline reached; demotion?
+                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
                     //print the process reaching its deadline
-                    remove(input.begin(), input.end(), input[iterator]);
+                    remove(currentProcesses.begin(), currentProcesses.end(), input[iterator]);
+                    cout << "Process " << input[iterator][0] << " reaches deadline" << '\n';
                     iterator++;
-                    cout << "Process " << iterator << " expires" << '\n';
-                }	
-                else if(input[iterator][2] + tq >= clockTicks){
+                   
+                    if(currentProcesses.empty()){
+                        break;
+                    }
+                }
+                //check highest priority and get process at highest priority
+                //start decrementing burst
+
+                //if burst ends, process finished
+
+               else if(clockTicks == (input[iterator][2] + tq)){
+                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
                     //demotion (remove from current priority queue and put into a lower one)
                     //print the process expiring
-                    remove(input.begin(), input.end(), input[iterator]);
+                    remove(currentProcesses.begin(), currentProcesses.end(), input[iterator]);
+                    cout << "Process " << input[iterator][0] << " time quantum expires" << '\n';
                     iterator++;
-                    cout << "Process " << iterator << " time quantum expires" << '\n';
-                }
+                    //pause burst
+                    //start wait time
+                    if(currentProcesses.empty()){
+                        break;
+                    }
+                } 
+                else{
+                    iterator++;
+                } 
 		}	
-
+    iterator = 0;
     clockTicks++;
     } 
+
+    //cout << "exited loop";
 
     vector <int> burstTimes;
     for(int i=0; i< numProcesses; i++){
