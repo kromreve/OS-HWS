@@ -1,68 +1,68 @@
 //Red Black Tree
 //Jacob Weber
+#include "RBTree.h"
 #include <iostream>
+#include <string>
 using namespace std;
 
 
 struct Node {
-    int value; // holds key
+    int pid; //id of process
+    int burst; //burst
+    int arrivalValue; // arrival value: used as key
+    int priorityValue; // priority: used for tree index
+    int deadlineValue; // deadline
+    int ioValue; //io
     Node *parent; // parent pointer
     Node *left; // left child pointer
     Node *right; // right child pointer
     int color; // will be set to red (1) or black (0)
 };
 
-typedef Node *NodePtr;
+    void RBTree::createEmptyNode(NodePtr node, NodePtr parent) {
+        node->arrivalValue = 0;
+        node->parent = parent;
+        node->left = nullptr;
+        node->right = nullptr;
+        node->color = 0;
+    }
 
-class RedBlackTree {
-    private:
-        NodePtr root;
-        NodePtr TNULL;
+    void RBTree::preOrderRec(NodePtr node) {
+        if (node != TNULL) {
+            cout << node->arrivalValue << " ";
+            preOrderRec(node->left);
+            preOrderRec(node->right);
+        }
+    }
 
-        void createEmptyNode(NodePtr node, NodePtr parent) {
-            node->value = 0;
-            node->parent = parent;
-            node->left = nullptr;
-            node->right = nullptr;
-            node->color = 0;
+    void RBTree::inOrderRec(NodePtr node) {
+        if (node != TNULL) {
+            inOrderRec(node->left);
+            cout << node->arrivalValue << " ";
+            inOrderRec(node->right);
+        }
+    }
+
+    void RBTree::postOrderRec(NodePtr node) {
+        if (node != TNULL) {
+            postOrderRec(node->left);
+            postOrderRec(node->right);
+            cout << node->arrivalValue << " ";
+        }
+    }
+
+    NodePtr RBTree::searchTreeRec(NodePtr node, int key) {
+        if (node == TNULL || key == node->arrivalValue) {
+            return node;
         }
 
-        void preOrderRec(NodePtr node) {
-            if (node != TNULL) {
-                cout << node->value << " ";
-                preOrderRec(node->left);
-                preOrderRec(node->right);
-            }
+        if (key < node->arrivalValue) {
+            return searchTreeRec(node->left, key);
         }
+        return searchTreeRec(node->right, key);
+    }
 
-        void inOrderRec(NodePtr node) {
-            if (node != TNULL) {
-                inOrderRec(node->left);
-                cout << node->value << " ";
-                inOrderRec(node->right);
-            }
-        }
-
-        void postOrderRec(NodePtr node) {
-            if (node != TNULL) {
-                postOrderRec(node->left);
-                postOrderRec(node->right);
-                cout << node->value << " ";
-            }
-        }
-
-        NodePtr searchTreeRec(NodePtr node, int key) {
-            if (node == TNULL || key == node->value) {
-                return node;
-            }
-
-            if (key < node->value) {
-                return searchTreeRec(node->left, key);
-            }
-            return searchTreeRec(node->right, key);
-        }
-
-    void delUpdate(NodePtr x) {
+    void RBTree::delUpdate(NodePtr x) {
         NodePtr s;
         while (x != root && x->color == 0) {
             if (x == x->parent->left) {
@@ -122,7 +122,7 @@ class RedBlackTree {
         x->color = 0;
     }
 
-    void redBlackTransplant(NodePtr u, NodePtr v) {
+    void RBTree::redBlackTransplant(NodePtr u, NodePtr v) {
         if (u->parent == nullptr) {
             root = v;
         } else if (u == u->parent->left) {
@@ -133,15 +133,15 @@ class RedBlackTree {
         v->parent = u->parent;
     }
 
-    void deleteNodeRec(NodePtr node, int key) {
+    void RBTree::deleteNodeRec(NodePtr node, int key) {
         NodePtr z = TNULL;
         NodePtr x, y;
         while (node != TNULL) {
-            if (node->value == key) {
+            if (node->arrivalValue == key) {
                 z = node;
             }
 
-            if (node->value <= key) {
+            if (node->arrivalValue <= key) {
                 node = node->right;
             } else {
                 node = node->left;
@@ -184,7 +184,7 @@ class RedBlackTree {
         }
     }
 
-    void fixInsert(NodePtr k) {
+    void RBTree::fixInsert(NodePtr k) {
         NodePtr u; //uncle node
         while (k->parent->color == 1) {
             if (k->parent == k->parent->parent->right) {
@@ -230,7 +230,7 @@ class RedBlackTree {
         root->color = 0;
     }
 
-    void printRec(NodePtr root, string indent, bool last) {
+    void RBTree::printRec(NodePtr root, string indent, bool last) {
         if (root != TNULL) {
             cout<<indent;
             if (last) {
@@ -242,15 +242,14 @@ class RedBlackTree {
             }
 
             string sColor = root->color?"RED":"BLACK";
-            cout<<root->value<<"("<<sColor<<")"<<endl;
+            cout<<root->arrivalValue<<"("<<sColor<<")"<<endl;
             printRec(root->left, indent, false);
             printRec(root->right, indent, true);
         }
         
     }
 
-public:
-    RedBlackTree() {
+    RBTree::RBTree() {
         TNULL = new Node;
         TNULL->color = 0;
         TNULL->left = nullptr;
@@ -258,37 +257,37 @@ public:
         root = TNULL;
     }
 
-    void preOrder() {
+    void RBTree::preOrder() {
         preOrderRec(this->root);
     }
 
-    void inOrder() {
+    void RBTree::inOrder() {
         inOrderRec(this->root);
     }
 
-    void postOrder() {
+    void RBTree::postOrder() {
         postOrderRec(this->root);
     }
 
-    NodePtr searchTree(int k) {
+    NodePtr RBTree::searchTree(int k) {
         return searchTreeRec(this->root, k);
     }
 
-    NodePtr minimum(NodePtr node) {
+    NodePtr RBTree::minimum(NodePtr node) {
         while (node->left != TNULL) {
             node = node->left;
         }
         return node;
     }
 
-    NodePtr maximum(NodePtr node) {
+    NodePtr RBTree::maximum(NodePtr node) {
         while (node->right != TNULL) {
             node = node->right;
         }
         return node;
     }
 
-    NodePtr successor(NodePtr x) {
+    NodePtr RBTree::successor(NodePtr x) {
         if (x->right != TNULL) {
             return minimum(x->right);
         }
@@ -301,7 +300,7 @@ public:
         return y;
     }
 
-    NodePtr predecessor(NodePtr x) {
+    NodePtr RBTree::predecessor(NodePtr x) {
         if (x->left != TNULL) {
             return maximum(x->left);
         }
@@ -315,7 +314,7 @@ public:
         return y;
     }
 
-    void leftRotate(NodePtr x) {
+    void RBTree::leftRotate(NodePtr x) {
         NodePtr y = x->right;
         x->right = y->left;
         if (y->left != TNULL) {
@@ -333,7 +332,7 @@ public:
         x->parent = y;
     }
 
-    void rightRotate(NodePtr x) {
+    void RBTree::rightRotate(NodePtr x) {
         NodePtr y = x->left;
         x->left = y->right;
         if (y->right != TNULL) {
@@ -351,10 +350,11 @@ public:
         x->parent = y;
     }
 
-    void insert(int key) {
+    void RBTree::insert(int id) {
         NodePtr node = new Node;
         node->parent = nullptr;
-        node->value = key;
+        node->pid = id;
+        //node->arrivalValue = key;
         node->left = TNULL;
         node->right = TNULL;
         node->color = 1; //new node will be red
@@ -364,7 +364,7 @@ public:
 
         while (x != TNULL) {
             y = x;
-            if (node->value < x->value) {
+            if (node->arrivalValue < x->arrivalValue) {
                 x = x->left;
             } else {
                 x = x->right;
@@ -374,7 +374,7 @@ public:
         node->parent = y;
         if (y == nullptr) {
             root = node;
-        } else if (node->value < y->value) {
+        } else if (node->arrivalValue < y->arrivalValue) {
             y->left = node;
         } else {
             y->right = node;
@@ -392,39 +392,17 @@ public:
         fixInsert(node);
     }
 
-    NodePtr getRoot() {
+    NodePtr RBTree::getRoot() {
         return this->root;
     }
 
-    void deleteNode(int value) {
+    void RBTree::deleteNode(int value) {
         deleteNodeRec(this->root, value);
     }
 
-    void formatPrint() {
+    void RBTree::formatPrint() {
         cout<<"RBTree:"<<endl;
         if (root) {
             printRec(this->root, "", true);
         }
     }
-
-
-
-};
-
-int main() {
-    RedBlackTree bt;
-    bt.insert(8);
-	bt.insert(18);
-	bt.insert(5);
-	bt.insert(15);
-	bt.insert(17);
-    bt.insert(20);
-    bt.insert(123);
-	bt.insert(25);
-	bt.insert(40);
-	bt.insert(80);
-	bt.deleteNode(25);
-    bt.formatPrint();
-    bt.inOrder();
-    return 0;
-}
