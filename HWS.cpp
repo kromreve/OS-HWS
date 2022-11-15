@@ -5,6 +5,7 @@
 #include <regex>
 #include <sstream>
 #include <queue>
+#include <algorithm>
 #define DBUG
 using namespace std;
 
@@ -213,60 +214,93 @@ int main(int argc,  char **argv){
 
 
     int clockTicks = 0, iterator = 0;
+    vector<int> temp;
     vector<vector<int>> currentProcesses;
-    int size = input.size();
+    vector<vector<int>> CPU;
+    
     
 
    // while(input[size-1][4] <= clockTicks){
     while(1){
+        int size = input.size();
+        
         	
-        for(int i =0; i< input.size(); i++) {															
+        for(int i =0; i< input.size(); i++) {
+															
 				if (input[iterator][2] == clockTicks) {	//arrival
-                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';											
+                    										
 						currentProcesses.push_back(input[iterator]);											
                         cout << "Process " << input[iterator][0] << " arrives" << '\n';
                         iterator++;
-                        
-                        //print the process arriving in the chart																														//
+                        																														//
 				}
                 else if (input[iterator][4] == clockTicks){ //reaches deadline
-                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
-                    //print the process reaching its deadline
+                   // cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
+                   
                     remove(currentProcesses.begin(), currentProcesses.end(), input[iterator]);
                     cout << "Process " << input[iterator][0] << " reaches deadline" << '\n';
+                    
+                    remove(CPU.begin(), CPU.end(), input[iterator]);
+                    
                     iterator++;
-                   
-                    if(currentProcesses.empty()){
-                        break;
-                    }
+                    sort(input.begin(), input.end(), comparePriority);
+                    
                 }
-                //check highest priority and get process at highest priority
-                //start decrementing burst
-
-                //if burst ends, process finished
-
-               else if(clockTicks == (input[iterator][2] + tq)){
-                    cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
-                    //demotion (remove from current priority queue and put into a lower one)
-                    //print the process expiring
+                
+                else if(input[iterator][1] == 0){ //if burst ends, process finished
                     remove(currentProcesses.begin(), currentProcesses.end(), input[iterator]);
+                    remove(CPU.begin(), CPU.end(), input[iterator]); 
+                    cout << "Process " << input[iterator][0] << " finishes running" << '\n';
+                }
+
+               else if(clockTicks == (input[iterator][2] + tq)){ //time quantum expires
+                 //   cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
+                    //demotion (remove from current priority queue and put into a lower one)
+                    
                     cout << "Process " << input[iterator][0] << " time quantum expires" << '\n';
+                    remove(CPU.begin(), CPU.end(), input[iterator]); //pause burst
                     iterator++;
-                    //pause burst
-                    //start wait time
-                    if(currentProcesses.empty()){
-                        break;
-                    }
+                    
+                    //start wait
+                    
                 } 
                 else{
                     iterator++;
                 } 
-		}	
+		}
+        sort(currentProcesses.begin(), currentProcesses.end(), comparePriority);
+        
+        if(!currentProcesses.empty()){  //start running process with highest priority
+        for(int i =99; i>=0; i--){
+            if(currentProcesses[(currentProcesses.size()-1)][3] == i){
+              //  cout << '\n' << "Clock tick " << clockTicks << ": " << '\n';
+                queue<vector<int>> priorityI = allQueues[i];
+                temp = priorityI.front();
+                currentProcesses.pop_back();
+                CPU.push_back(temp);
+                cout << "Process " << temp[0] << " enters CPU" << '\n';
+                }
+            else{
+                continue;
+            }
+            break;
+        }
+        }
+
+        for(int i=0; i< CPU.size(); i++){ //decrease burst for active processes
+            CPU[i][1]--;
+        }
+        
+
+       sort(input.begin(), input.end(), compareDeadline);
+        if(clockTicks > input[size-1][4]){
+                        break;
+                    }	
     iterator = 0;
     clockTicks++;
     } 
 
-    //cout << "exited loop";
+    cout << "exited loop";
 
     vector <int> burstTimes;
     for(int i=0; i< numProcesses; i++){
