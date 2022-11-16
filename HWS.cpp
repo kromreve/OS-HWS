@@ -6,6 +6,7 @@
 #include <sstream>
 #include <queue>
 #include <algorithm>
+#include "RBTree.h"
 #define DBUG
 using namespace std;
 
@@ -106,7 +107,7 @@ vector<vector<int>> menu(vector<vector<int>> processes){
         cout << "Enter the aging timer: ";
         cin >> age;
     } else {
-        cout << "Invlaid input";
+        cout << "Invalid input";
     }
 
 
@@ -189,6 +190,20 @@ bool compareDeadline(vector<int> a, vector<int> b) {
 }
 
 int main(int argc,  char **argv){
+    RBTree q;
+    for (int i = 0; i < input.size(); i++) {
+        q.insert(
+            input[i][0],
+            input[i][1],
+            input[i][2],
+            input[i][3],
+            input[i][4],
+            input[i][5]
+            );
+    }
+    //q.formatPrint();
+    cout << '\n' << '\n' << '\n';
+    q.priorityOrder();
     //cout << "I am line 188" << '\n';
     string processes=argv[1];
     vector<vector<int>> input = readInput(processes);
