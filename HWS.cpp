@@ -199,6 +199,14 @@ bool compareBurst(vector<int> a, vector<int> b) {
 }
 
 int main(int argc,  char **argv){
+    
+    //cout << "I am line 188" << '\n';
+    string processes=argv[1];
+    vector<vector<int>> input = readInput(processes);
+    //cout << "I am line 191" << '\n';
+    sort(input.begin(), input.end(), compareArrival);
+    menu(input);
+
     RBTree q;
     for (int i = 0; i < input.size(); i++) {
         q.insert(
@@ -213,12 +221,6 @@ int main(int argc,  char **argv){
     //q.formatPrint();
     cout << '\n' << '\n' << '\n';
     q.priorityOrder();
-    //cout << "I am line 188" << '\n';
-    string processes=argv[1];
-    vector<vector<int>> input = readInput(processes);
-    //cout << "I am line 191" << '\n';
-    sort(input.begin(), input.end(), compareArrival);
-    print(menu(input));
     //cout << input[2][0];
     //printBurst(input);
 
