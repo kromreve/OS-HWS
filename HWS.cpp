@@ -192,12 +192,25 @@ int main(int argc,  char **argv){
 
     sort(input.begin(), input.end(), compareArrival);
     
-    print(menu(input));
+    //print(menu(input));
+    menu(input);
     
-    RBTree sched[100];
-    sched[1].insert(1);
-    cout << "process 1 inserted" << '\n';
-    sched[1].formatPrint();
+    RBTree q;
+    for (int i = 0; i < input.size(); i++) {
+        q.insert(
+            input[i][0],
+            input[i][1],
+            input[i][2],
+            input[i][3],
+            input[i][4],
+            input[i][5]
+            );
+    }
+    //q.formatPrint();
+    cout << '\n' << '\n' << '\n';
+    q.priorityOrder();
+    
+    
 
     int numProcesses = input.size();
     vector<queue<vector<int>>> allQueues;

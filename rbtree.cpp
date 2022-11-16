@@ -9,10 +9,12 @@ using namespace std;
 struct Node {
     int pid; //id of process
     int burst; //burst
-    int arrivalValue; // arrival value: used as key
-    int priorityValue; // priority: used for tree index
+    int arrivalValue;
+    int priority; // priority: used as key
     int deadlineValue; // deadline
     int ioValue; //io
+    int age; 
+    int basePriority;
     Node *parent; // parent pointer
     Node *left; // left child pointer
     Node *right; // right child pointer
@@ -20,7 +22,7 @@ struct Node {
 };
 
     void RBTree::createEmptyNode(NodePtr node, NodePtr parent) {
-        node->arrivalValue = 0;
+        node->priority = 0;
         node->parent = parent;
         node->left = nullptr;
         node->right = nullptr;
@@ -29,7 +31,7 @@ struct Node {
 
     void RBTree::preOrderRec(NodePtr node) {
         if (node != TNULL) {
-            cout << node->arrivalValue << " ";
+            cout << node->priority << " ";
             preOrderRec(node->left);
             preOrderRec(node->right);
         }
@@ -38,7 +40,7 @@ struct Node {
     void RBTree::inOrderRec(NodePtr node) {
         if (node != TNULL) {
             inOrderRec(node->left);
-            cout << node->arrivalValue << " ";
+            cout << node->priority << " ";
             inOrderRec(node->right);
         }
     }
@@ -47,16 +49,24 @@ struct Node {
         if (node != TNULL) {
             postOrderRec(node->left);
             postOrderRec(node->right);
-            cout << node->arrivalValue << " ";
+            cout << node->priority << " ";
+        }
+    }
+
+    void RBTree::priorityOrderRec(NodePtr node) {
+        if (node != TNULL) {
+            priorityOrderRec(node->right);
+            cout << node->priority << " ";
+            priorityOrderRec(node->left);
         }
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int key) {
-        if (node == TNULL || key == node->arrivalValue) {
+        if (node == TNULL || key == node->priority) {
             return node;
         }
 
-        if (key < node->arrivalValue) {
+        if (key < node->priority) {
             return searchTreeRec(node->left, key);
         }
         return searchTreeRec(node->right, key);
@@ -137,11 +147,11 @@ struct Node {
         NodePtr z = TNULL;
         NodePtr x, y;
         while (node != TNULL) {
-            if (node->arrivalValue == key) {
+            if (node->priority == key) {
                 z = node;
             }
 
-            if (node->arrivalValue <= key) {
+            if (node->priority <= key) {
                 node = node->right;
             } else {
                 node = node->left;
@@ -242,7 +252,7 @@ struct Node {
             }
 
             string sColor = root->color?"RED":"BLACK";
-            cout<<root->arrivalValue<<"("<<sColor<<")"<<endl;
+            cout<<root->priority<<"("<<sColor<<")"<<endl;
             printRec(root->left, indent, false);
             printRec(root->right, indent, true);
         }
@@ -267,6 +277,10 @@ struct Node {
 
     void RBTree::postOrder() {
         postOrderRec(this->root);
+    }
+
+    void RBTree::priorityOrder() {
+        priorityOrderRec(this->root);
     }
 
     NodePtr RBTree::searchTree(int k) {
@@ -350,11 +364,15 @@ struct Node {
         x->parent = y;
     }
 
-    void RBTree::insert(int id) {
+    void RBTree::insert(int id, int bst, int avl, int pri, int dln, int io) {
         NodePtr node = new Node;
         node->parent = nullptr;
         node->pid = id;
-        //node->arrivalValue = key;
+        node->burst = bst;
+        node->arrivalValue = avl;
+        node->priority = pri;
+        node->deadlineValue = dln;
+        node->ioValue = io;
         node->left = TNULL;
         node->right = TNULL;
         node->color = 1; //new node will be red
@@ -364,7 +382,7 @@ struct Node {
 
         while (x != TNULL) {
             y = x;
-            if (node->arrivalValue < x->arrivalValue) {
+            if (node->priority < x->priority) {
                 x = x->left;
             } else {
                 x = x->right;
@@ -374,7 +392,7 @@ struct Node {
         node->parent = y;
         if (y == nullptr) {
             root = node;
-        } else if (node->arrivalValue < y->arrivalValue) {
+        } else if (node->priority < y->priority) {
             y->left = node;
         } else {
             y->right = node;
