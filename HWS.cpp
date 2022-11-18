@@ -208,16 +208,7 @@ int main(int argc,  char **argv){
     menu(input);
 
     RBTree q;
-    for (int i = 0; i < input.size(); i++) {
-        q.insert(
-            input[i][0],
-            input[i][1],
-            input[i][2],
-            input[i][3],
-            input[i][4],
-            input[i][5]
-            );
-    }
+    
     //q.formatPrint();
     cout << '\n' << '\n' << '\n';
     q.priorityOrder();
@@ -253,12 +244,8 @@ int main(int argc,  char **argv){
         sort(CPU.begin(), CPU.end(), comparePriority);
 
         if(!currentProcesses.empty()){  //start running process with highest priority
-            if(printer == true){
-                            cout << "Clock Tick " << clockTicks << ": |";
-                        }
-            else{
-                cout << "\t\t" << "|";
-            }
+
+            
         for(int i =99; i>=0; i--){
             
             if(currentProcesses[(currentProcesses.size()-1)][3] == i){
@@ -270,8 +257,18 @@ int main(int argc,  char **argv){
                
                 CPU.push_back(temp);
                 CPU[CPU.size()-1][2] = clockTicks; //set new arrival time
-                
+
+                #ifdef debug
+            if(printer == true){
+                            cout << "Clock Tick " << clockTicks << ": |";
+                        }
+                        else{
+                cout << "\t\t" << "|";
+                }
+
                 cout << " Process " << temp[0] << " enters CPU" << '\n';
+                #endif
+
                 }
             else{
                 continue;
@@ -290,38 +287,53 @@ int main(int argc,  char **argv){
         for(int i =0; i< input.size(); i++) {
 															
 				if (input[iterator][2] == clockTicks) {	//arrival
+                        
+
+                        
+                            q.insert(
+                            input[iterator][0],
+                            input[iterator][1],
+                            input[iterator][2],
+                            input[iterator][3],
+                            input[iterator][4],
+                            input[iterator][5]
+                            );
+                        
+                    										
+						//currentProcesses.push_back(input[iterator]);
+                           #ifdef debug
                         if(printer == true){
                             cout << "Clock Tick " << clockTicks << ": |";
-                            printer == false;
                         }
-                    										
-						currentProcesses.push_back(input[iterator]);											
-                        cout << " Process " << input[iterator][0] << " arrives" << '\n';
+
+                cout << " Process " << input[iterator][0] << " arrives" << '\n';
+                #endif											
+                        
                         input[iterator][6] == 0;
                         iterator++;
                         																														
 				}
                   else if (input[iterator][4] == clockTicks ){ //reaches deadline
                
-                        if(printer == true){
+                    #ifdef debug
+                    if(printer == true){
                             cout << "Clock Tick " << clockTicks << ": |";
-                            printer == false;
                         }
+                            cout << " Process " << input[iterator][0] << " reaches deadline" << '\n';
+                
+                     #endif
                    
-                    
-                    
-                    cout << " Process " << input[iterator][0] << " reaches deadline" << '\n';
-                    sort(currentProcesses.begin(), currentProcesses.end(), compareDeadline);
-                    sort(CPU.begin(), CPU.end(), compareDeadline);
-                    
-                   if(!CPU.empty() && CPU[CPU.size()-1][4] == clockTicks){
-                    cout << "before";
-                        print(CPU);
-                        CPU.pop_back();
-                    cout << "after";
-                    print(CPU);
+                    //sort(currentProcesses.begin(), currentProcesses.end(), compareDeadline);
+                    //sort(CPU.begin(), CPU.end(), compareDeadline);
+                    //q.deleteNode();
+                   //if(!CPU.empty() && CPU[CPU.size()-1][4] == clockTicks){
+                    //cout << "before";
+                      //  print(CPU);
+                      //  CPU.pop_back();
+                   // cout << "after";
+                  //  print(CPU);
                         
-                    }
+                    
                    if(!currentProcesses.empty() && currentProcesses[currentProcesses.size()-1][4] == clockTicks){
                         print(currentProcesses);
                         currentProcesses.pop_back();
@@ -335,9 +347,16 @@ int main(int argc,  char **argv){
                     
                 } 
                 
-                else if(input[iterator][6] == age){
+                else if(input[iterator][6] == age){  //age timer expires
                     //promote
-                     cout << " Process " << input[iterator][0] << " aging timer expires (promoted)" << '\n';
+                    #ifdef debug
+                    if(printer == true){
+                            cout << "Clock Tick " << clockTicks << ": |";
+                        }
+                            cout << " Process " << input[iterator][0] << " aging timer expires (promoted)" << '\n';
+                
+                     #endif
+                     
                      iterator++;
                 }
                 
@@ -348,12 +367,14 @@ int main(int argc,  char **argv){
 
         for(int i=0; i<CPU.size(); i++){
          if(CPU[i][1] == 0){ //if burst ends, process finished
+                    #ifdef debug
                     if(printer == true){
                             cout << "Clock Tick " << clockTicks << ": |";
-                            printer == false;
                         }
+                     cout << " Process " << CPU[i][0] << " finishes running" << '\n';
+                     #endif
                 
-                    cout << " Process " << CPU[i][0] << " finishes running" << '\n';
+                    
                     //remove(input.begin(), input.end(), CPU[i]);
                     
                     for(int i=0; i< CPU.size(); i++){ 
@@ -371,14 +392,17 @@ int main(int argc,  char **argv){
                 }
 
                 else if(clockTicks == (CPU[i][2] + tq)){ //time quantum expires
+                    #ifdef debug
                     if(printer == true){
                             cout << "Clock Tick " << clockTicks << ": |";
-                            printer == false;
                         }
+                            cout << " Process " << CPU[i][0] << " time quantum expires (demoted)" << '\n';
+                
+                     #endif
                  
                     //demotion (remove from current priority queue and put into a lower one)
                     
-                    cout << " Process " << CPU[i][0] << " time quantum expires (demoted)" << '\n';
+                
                    
                    
                         currentProcesses.push_back(CPU[i]);
