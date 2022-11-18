@@ -104,8 +104,7 @@ vector<vector<int>> menu(vector<vector<int>> processes){
     } else if(yn == 'n'){
         cout << "Enter the time quantum: ";
         cin >> tq;
-        cout << "Enter the aging timer: ";
-        cin >> age;
+        
     } else {
         cout << "Invalid input";
     }
