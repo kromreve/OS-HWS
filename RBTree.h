@@ -43,7 +43,7 @@ public:
     int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
-    void deleteNode(int value);
+    void deleteNode(int value, int pri);
     void formatPrint();
 };
 #endif

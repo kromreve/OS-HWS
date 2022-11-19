@@ -70,13 +70,47 @@ void print(vector<vector<int>> input){
 
 
 //The scheduler method is used to keep track of what is happening at every clock tick and responds accordingly
-void scheduler(vector<vector<int>> processes){
+int scheduler(vector<vector<int>> processes){
     int clockticks = 0;
     int iterator = 0;
     RBTree queue;
     Linkedlist list;
+    int cpu[7];
 
     while(1){
+
+        if(CPU.empty() && !queue.empty()){  //start running process with highest priority
+
+            //add process with highest to cpu
+
+            CPU[6] = clockticks +tq;
+        }
+
+        if(!CPU.empty()){
+
+            if(CPU[1] == 0){  //process finishes
+
+                    queue.remove(CPU);
+
+                    CPU.remove(CPU);
+
+                }
+
+            else{  //decrement burst
+
+                int temp = CPU[1];
+
+                CPU[1] = temp--;
+
+            }
+
+            if(CPU[6] == clockTick){ //time quantum expires
+
+                CPU.remove(CPU);
+                //demote
+
+            }
+        }
 
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
@@ -107,8 +141,29 @@ void scheduler(vector<vector<int>> processes){
         if(!list.isEmpty()){
             if(list.getLastClockTick()==clockticks){
                 int process = list.getLastPID();
-                cout << "Process " << process << " needs to be promoted." << '\n';
-                list.deleteNode(1); 
+                cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
+                //Extracts the node/process that needs to be promoted
+                int pvalues[6] = {*(queue.exportProcess(queue.searchTree(process))),
+                                    *(queue.exportProcess(queue.searchTree(process))+1),
+                                    *(queue.exportProcess(queue.searchTree(process))+2),
+                                    *(queue.exportProcess(queue.searchTree(process))+3),
+                                    *(queue.exportProcess(queue.searchTree(process))+4),
+                                    *(queue.exportProcess(queue.searchTree(process))+5)
+                                    };
+                int pri = pvalues[3];
+                pvalues[3] = pri + 10;
+                queue.deleteNode(process, pri);
+                list.deleteNode(1);
+                queue.insert(
+                    pvalues[0],
+                    pvalues[1],
+                    pvalues[2],
+                    pvalues[3],
+                    pvalues[4],
+                    pvalues[5]
+                );
+                int promotionClockTick = clockticks + 100;
+                list.insertNode(pvalues[3], promotionClockTick);
             }
         }
 
@@ -118,6 +173,7 @@ void scheduler(vector<vector<int>> processes){
         //print(processes);
         clockticks++;
     }
+    return clockticks;
 }
 
 
@@ -131,9 +187,14 @@ int main(int argc,  char **argv){
     
     sort(input.begin(), input.end(), compareArrival);
 
+    int startTime = input[0][2];
+
     cout << "Enter the time quantum: ";
     cin >> tq;
 
-    scheduler(input);
+    int endTime = scheduler(input);
+
+    int totalTime = endTime - startTime;
     
+    //cout << "Average Turn Around Time = " << totalTime/input.size();
 }
