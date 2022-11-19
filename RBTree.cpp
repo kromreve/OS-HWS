@@ -53,10 +53,10 @@ struct Node {
         }
     }
 
-    void RBTree::priorityOrderRec(NodePtr node) {
+    NodePtr RBTree::priorityOrderRec(NodePtr node) {
         if (node != TNULL) {
             priorityOrderRec(node->right);
-            cout << node->priority << " ";
+            return node->priority;
             priorityOrderRec(node->left);
         }
     }
@@ -279,8 +279,8 @@ struct Node {
         postOrderRec(this->root);
     }
 
-    void RBTree::priorityOrder() {
-        priorityOrderRec(this->root);
+    NodePtr RBTree::priorityOrder() {
+        return priorityOrderRec(this->root);
     }
 
     NodePtr RBTree::searchTree(int k) {
@@ -362,6 +362,12 @@ struct Node {
         }
         y->right = x;
         x->parent = y;
+    }
+
+    NodePtr getTopNode() {
+        priorityOrderRec(this->root);
+
+
     }
 
     int * RBTree::exportProcess(NodePtr node) {

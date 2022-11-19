@@ -12,7 +12,6 @@ private:
 
     NodePtr root;
     NodePtr TNULL;
-    int pList[6];
 
     void createEmptyNode(NodePtr node, NodePtr parent);
     void preOrderRec(NodePtr node);
@@ -32,7 +31,7 @@ public:
     void preOrder();
     void inOrder();
     void postOrder();
-    void priorityOrder();
+    NodePtr priorityOrder();
     NodePtr searchTree(int k);
     NodePtr minimum(NodePtr node);
     NodePtr maximum(NodePtr node);
@@ -40,6 +39,7 @@ public:
     NodePtr predecessor(NodePtr x);
     void leftRotate(NodePtr x);
     void rightRotate(NodePtr x);
+    NodePtr getTopNode();
     int * exportProcess(NodePtr x);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
