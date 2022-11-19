@@ -12,6 +12,7 @@ private:
 
     NodePtr root;
     NodePtr TNULL;
+    int pList[6];
 
     void createEmptyNode(NodePtr node, NodePtr parent);
     void preOrderRec(NodePtr node);
@@ -39,6 +40,7 @@ public:
     NodePtr predecessor(NodePtr x);
     void leftRotate(NodePtr x);
     void rightRotate(NodePtr x);
+    int * exportProcess(NodePtr x);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
     void deleteNode(int value);

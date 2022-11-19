@@ -364,6 +364,18 @@ struct Node {
         x->parent = y;
     }
 
+    int * RBTree::exportProcess(NodePtr node) {
+        static int export[6];
+        export[0] = node->pid;
+        export[1] = node->burst;
+        export[2] = node->arrivalValue;
+        export[3] = node->priority;
+        export[4] = node->deadlineValue;
+        export[5] = node->ioValue;
+
+        return export;
+    }
+
     void RBTree::insert(int id, int bst, int avl, int pri, int dln, int io) {
         NodePtr node = new Node;
         node->parent = nullptr;
