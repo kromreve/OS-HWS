@@ -61,15 +61,16 @@ struct Node {
         }
     }
 
-    NodePtr RBTree::searchTreeRec(NodePtr node, int key) {
-        if (node == TNULL || key == node->priority) {
+    NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
+        if (node == TNULL || id == node->id) {
             return node;
         }
 
-        if (key < node->priority) {
-            return searchTreeRec(node->left, key);
+        if (id != node->id) {
+            searchTreeRec(node->left, id);
+            searchTreeRec(node->right, id);
         }
-        return searchTreeRec(node->right, key);
+        
     }
 
     void RBTree::delUpdate(NodePtr x) {
@@ -283,8 +284,8 @@ struct Node {
         return priorityOrderRec(this->root);
     }
 
-    NodePtr RBTree::searchTree(int k) {
-        return searchTreeRec(this->root, k);
+    NodePtr RBTree::searchTree(int id) {
+        return searchTreeRec(this->root, id);
     }
 
     NodePtr RBTree::minimum(NodePtr node) {
