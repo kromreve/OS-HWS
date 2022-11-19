@@ -62,11 +62,11 @@ struct Node {
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
-        if (node == TNULL || id == node->id) {
+        if (node == TNULL || id == node->pid) {
             return node;
         }
 
-        if (id != node->id) {
+        if (id != node->pid) {
             searchTreeRec(node->left, id);
             searchTreeRec(node->right, id);
         }
@@ -144,15 +144,15 @@ struct Node {
         v->parent = u->parent;
     }
 
-    void RBTree::deleteNodeRec(NodePtr node, int key) {
+    void RBTree::deleteNodeRec(NodePtr node, int id, int pri) {
         NodePtr z = TNULL;
         NodePtr x, y;
         while (node != TNULL) {
-            if (node->priority == key) {
+            if (node->priority == pri && node->pid == id) {
                 z = node;
             }
 
-            if (node->priority <= key) {
+            if (node->priority <= pri) {
                 node = node->right;
             } else {
                 node = node->left;
@@ -427,8 +427,8 @@ struct Node {
         return this->root;
     }
 
-    void RBTree::deleteNode(int value) {
-        deleteNodeRec(this->root, value);
+    void RBTree::deleteNode(int id, int pri) {
+        deleteNodeRec(this->root, id, pri);
     }
 
     void RBTree::formatPrint() {

@@ -21,7 +21,7 @@ private:
     NodePtr searchTreeRec(NodePtr node, int id);
     void delUpdate(NodePtr x);
     void redBlackTransplant(NodePtr u, NodePtr v);
-    void deleteNodeRec(NodePtr node, int key);
+    void deleteNodeRec(NodePtr node, int id, int pri);
     void fixInsert(NodePtr k);
     void printRec(NodePtr root, string indent, bool last);
 
