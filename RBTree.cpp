@@ -1,4 +1,3 @@
-
 //Red Black Tree
 //Jacob Weber
 #include "RBTree.h"

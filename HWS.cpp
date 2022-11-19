@@ -13,7 +13,6 @@ using namespace std;
 int numNegatives = 0;
 int tq, age;
 
-
 vector<vector<int>> readInput(const string filename){
     string line;
     ifstream file(filename);
