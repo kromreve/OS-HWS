@@ -144,34 +144,28 @@ void Linkedlist::insertNode(int PID, int promotionClockTick)
 
 int Linkedlist::getLastClockTick(){
     Node* temp = head;
-    int promotionTick;
+    int promotionTick = temp->promotionClockTick;
 
-    if (head == NULL) {
-        return 0;
-    } 
-
-    while (temp != NULL) {
-        //cout << temp->PID << " ";
-        temp = temp->next;
-        promotionTick = temp->promotionClockTick;
-    }
+    // while (temp != NULL) {
+    //     //cout << temp->PID << " ";
+    //     promotionTick = temp->promotionClockTick;
+    //     temp = temp->next;
+    // }
     
     return promotionTick;
 }
 
 int Linkedlist::getLastPID(){
     Node* temp = head;
+    int id = temp->PID;
 
-    if (head == NULL) {
-        return 0;
-    } 
-
-    while (temp != NULL) {
-        //cout << temp->PID << " ";
-        temp = temp->next;
-    }
-    int process = temp->PID;
-    return process;
+    // while (temp != NULL) {
+    //     //cout << temp->PID << " ";
+    //     id = temp->PID;
+    //     temp = temp->next;
+    // }
+    
+    return id;
 }
 
 Node Linkedlist::getLastNode(){
@@ -218,12 +212,15 @@ void Linkedlist::printList()
 int main(){
     Linkedlist list;
 
-    cout << "Hello";
+    //cout << "Hello";
     list.insertNode(10, 20);
     list.insertNode(69, 96);
+    list.insertNode(34, 75);
+
+    //list.printList();
 
     cout << list.getLastClockTick() << '\n';
     cout << list.getLastPID();
 
-    list.printList();
+    
 }

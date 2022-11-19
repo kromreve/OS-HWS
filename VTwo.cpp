@@ -103,17 +103,13 @@ void scheduler(vector<vector<int>> processes){
             }
         }
 
-        cout << list.isEmpty() << '\n';
-
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
-            //cout << "The list is not empty" << '\n';
-            //cout << "Process ID from list: " << list.getLastPID() << '\n';
-            //cout << "Promotion Clock Tick: " << list.getLastClockTick() << '\n';
-            // if(list.getLastClockTick()==clockticks){
-            //     int process = list.getLastPID();
-            //     cout << "Process " << process << " needs to be promoted." << '\n'; 
-            // }
+            if(list.getLastClockTick()==clockticks){
+                int process = list.getLastPID();
+                cout << "Process " << process << " needs to be promoted." << '\n';
+                list.deleteNode(1); 
+            }
         }
 
         //if(q is empty && cpu is empty && processes is empty){
