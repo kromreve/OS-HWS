@@ -17,7 +17,7 @@ private:
     void preOrderRec(NodePtr node);
     void inOrderRec(NodePtr node);
     void postOrderRec(NodePtr node);
-    void priorityOrderRec(NodePtr node);
+    NodePtr priorityOrderRec(NodePtr node);
     NodePtr searchTreeRec(NodePtr node, int key);
     void delUpdate(NodePtr x);
     void redBlackTransplant(NodePtr u, NodePtr v);
@@ -26,7 +26,7 @@ private:
     void printRec(NodePtr root, string indent, bool last);
 
 public:
-   
+
     RBTree();
     void preOrder();
     void inOrder();
@@ -40,7 +40,7 @@ public:
     void leftRotate(NodePtr x);
     void rightRotate(NodePtr x);
     NodePtr getTopNode();
-    int * exportProcess(NodePtr x);
+    int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
     void deleteNode(int value);

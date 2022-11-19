@@ -56,7 +56,7 @@ struct Node {
     NodePtr RBTree::priorityOrderRec(NodePtr node) {
         if (node != TNULL) {
             priorityOrderRec(node->right);
-            return node->priority;
+            return node;
             priorityOrderRec(node->left);
         }
     }
@@ -364,22 +364,16 @@ struct Node {
         x->parent = y;
     }
 
-    NodePtr getTopNode() {
-        priorityOrderRec(this->root);
-
-
-    }
-
     int * RBTree::exportProcess(NodePtr node) {
-        static int export[6];
-        export[0] = node->pid;
-        export[1] = node->burst;
-        export[2] = node->arrivalValue;
-        export[3] = node->priority;
-        export[4] = node->deadlineValue;
-        export[5] = node->ioValue;
-
-        return export;
+        static int pList[6] = {
+            node->pid, 
+            node->burst,
+            node->arrivalValue,
+            node->priority,
+            node->deadlineValue,
+            node->ioValue
+        };
+        return pList;
     }
 
     void RBTree::insert(int id, int bst, int avl, int pri, int dln, int io) {
