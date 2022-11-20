@@ -5,22 +5,32 @@ using namespace std;
 // a node of the linked list.
 class Node {
 public:
-    int PID;
+    int pid;
+    int bst;
+    int arrival;
+    int priority;
+    int basePriority;
+    int io;
     int promotionClockTick;
     Node* next;
   
     // Default constructor
     Node()
     {
-        PID = 0;
+        pid, bst, arrival, priority, io = 0;
         promotionClockTick = 0;
         next = NULL;
     }
   
     // Parameterised Constructor
-    Node(int PID, int promotionClockTick)
+    Node(int a, int b, int c, int d, int e, int promotionClockTick)
+    //a pid, b burst, c arrival, d priority, e io
     {
-        this->PID = PID;
+        this->pid = a;
+        this->bst = b;
+        this->arrival = c;
+        this->priority = d;
+        this->io = e;
         this->promotionClockTick = promotionClockTick;
         this->next = NULL;
     }
@@ -30,15 +40,24 @@ public:
 // implement a linked list.
 class Linkedlist {
     Node* head;
+    
   
 public:
+    int priority;
     // Default constructor
-    Linkedlist() { head = NULL; }
+    Linkedlist() { 
+        head = NULL; 
+    }
+
+    Linkedlist(int p) { 
+        head = NULL; 
+        priority = p;
+    }
   
     // Function to insert a
     // node at the end of the
     // linked list.
-    void insertNode(int, int);
+    void insertNode(int, int, int, int, int, int);
   
     // Function to print the
     // linked list.
@@ -58,6 +77,7 @@ public:
     // Function to delete the
     // node at given position
     void deleteNode(int);
+
 };
   
 // Function to delete the
@@ -119,10 +139,10 @@ void Linkedlist::deleteNode(int nodeOffset)
 }
   
 // Function to insert a new node.
-void Linkedlist::insertNode(int PID, int promotionClockTick)
+void Linkedlist::insertNode(int a, int b, int c, int d, int e, int promotionClockTick)
 {
     // Create the new Node.
-    Node* newNode = new Node(PID, promotionClockTick);
+    Node* newNode = new Node(a, b, c, d, e, promotionClockTick);
   
     // Assign to head
     if (head == NULL) {
@@ -157,7 +177,7 @@ int Linkedlist::getLastClockTick(){
 
 int Linkedlist::getLastPID(){
     Node* temp = head;
-    int id = temp->PID;
+    int id = temp->pid;
 
     // while (temp != NULL) {
     //     //cout << temp->PID << " ";
@@ -203,7 +223,7 @@ void Linkedlist::printList()
   
     // Traverse the list.
     while (temp != NULL) {
-        cout << temp->PID << " ";
+        cout << temp->pid << " " << temp->arrival << '\n';
         temp = temp->next;
     }
 }
