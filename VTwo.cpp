@@ -165,7 +165,7 @@ int scheduler(vector<vector<int>> processes){
         
         }
 	 
-	for(int i =0; i< processes.size(); i++){
+
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
             //Loop to check if the next process also arrives at the same clock tick    
@@ -200,8 +200,7 @@ int scheduler(vector<vector<int>> processes){
 
                 processes.erase(processes.begin());
             }
-		iterator++;
-	}
+		
 
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
