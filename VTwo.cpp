@@ -151,12 +151,12 @@ int scheduler(vector<vector<int>> processes){
                 //queue.deleteNode(queue.searchTree(currentPID));
                 //list.deleteNode(1);
                 queue.insert(
-                    cpu[0],
-                    cpu[1],
-                    cpu[2],
-                    cpu[3],
-                    cpu[4],
-                    cpu[5]
+                    CPU[0],
+                    CPU[1],
+                    CPU[2],
+                    CPU[3],
+                    CPU[4],
+                    CPU[5]
                 );
                 list.insertNode(currentPID, promotionClockTick);
                 CPU.clear();
