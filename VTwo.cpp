@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "RBTree.h"
 #include "LinkedList.h"
-#define DBUG
+//#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -70,13 +70,78 @@ void print(vector<vector<int>> input){
 
 
 //The scheduler method is used to keep track of what is happening at every clock tick and responds accordingly
-void scheduler(vector<vector<int>> processes){
+int scheduler(vector<vector<int>> processes){
     int clockticks = 0;
     int iterator = 0;
     RBTree queue;
     Linkedlist list;
+    int cpu[7];
+    bool printer = true;
 
     while(1){
+
+        // if(CPU.empty() && !queue.empty()){  //start running process with highest priority
+		// #ifdef debug
+        //                 if(printer == true){
+        //                     cout << "Clock Tick " << clockticks << ": |";
+		// 	    printer = false;
+        //                 }
+		//     	else{
+		// 	    cout << "\t\t";
+
+        //         cout << " Process " << processes[iterator][0] << " enters the CPU" << '\n';
+        //         #endif	
+
+        //     //add process with highest to cpu
+
+        //     CPU[6] = clockticks +tq;
+        // }
+
+        // if(!CPU.empty()){
+
+        //     if(CPU[1] == 0){  //process finishes
+		//     #ifdef debug
+        //                 if(printer == true){
+        //                     cout << "Clock Tick " << clockticks << ": |";
+		// 	    printer = false;
+        //                 }
+		//     	else{
+		// 	    cout << "\t\t";
+
+        //         cout << " Process " << processes[iterator][0] << " finishes running" << '\n';
+        //         #endif	
+
+        //             //queue.remove(CPU);
+
+        //             CPU.remove(CPU);
+
+        //         }
+
+        //     else{  //decrement burst
+
+        //         int temp = CPU[1];
+
+        //         CPU[1] = temp--;
+
+        //     }
+
+        //     if(CPU[6] == clockTick){ //time quantum expires
+		// #ifdef debug
+        //                 if(printer == true){
+        //                     cout << "Clock Tick " << clockticks << ": |";
+		// 	    printer = false;
+        //                 }
+		//     	else{
+		// 	    cout << "\t\t";
+
+        //         cout << " Process " << processes[iterator][0] << " is demoted" << '\n';
+        //         #endif	
+
+        //         CPU.remove(CPU);
+        //         //demote
+
+        //     }
+        // }
 
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
@@ -90,7 +155,17 @@ void scheduler(vector<vector<int>> processes){
                     processes[iterator][4],
                     processes[iterator][5]
                 );
-                cout << "Process " << processes[iterator][0] << " arrived at clock tick " << clockticks << '\n';
+		#ifdef debug
+                        if(printer == true){
+                            cout << "Clock Tick " << clockticks << ": |";
+		            printer = false;
+                        }
+		    	else{
+			    cout << "\t\t";
+
+                cout << " Process " << processes[iterator][0] << " arrives" << '\n';
+                #endif	
+                //cout << "Process " << processes[iterator][0] << " arrived at clock tick " << clockticks << '\n';
 
                 //Insert process into linked list and calculate the clock tick that process will have to promote, if it is still in the tree
                 int pID = processes[iterator][0];
@@ -107,8 +182,42 @@ void scheduler(vector<vector<int>> processes){
         if(!list.isEmpty()){
             if(list.getLastClockTick()==clockticks){
                 int process = list.getLastPID();
-                cout << "Process " << process << " needs to be promoted." << '\n';
-                list.deleteNode(1); 
+		#ifdef debug
+                if(printer == true){
+                        cout << "Clock Tick " << clockticks << ": |";
+                printer = false;
+                    }
+		    	else{
+			    cout << "\t\t";
+
+                cout << " Process " << processes[iterator][0] << " is promoted" << '\n';
+                #endif
+                cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
+                //Extracts the node/process that needs to be promoted
+                //cout << "Testing Search Method: " << *(queue.exportProcess(queue.searchTree(7))+2) << '\n';
+                vector<int> pvalues = {
+                    *(queue.exportProcess(queue.searchTree(process))),
+                    *(queue.exportProcess(queue.searchTree(process))+1),
+                    *(queue.exportProcess(queue.searchTree(process))+2),
+                    *(queue.exportProcess(queue.searchTree(process))+3),
+                    *(queue.exportProcess(queue.searchTree(process))+4),
+                    *(queue.exportProcess(queue.searchTree(process))+5)
+                    };
+                int pri = pvalues[3];
+                pvalues[3] = pri + 10;
+                queue.deleteNode(process);
+                list.deleteNode(1);
+                queue.insert(
+                    pvalues[0],
+                    pvalues[1],
+                    pvalues[2],
+                    pvalues[3],
+                    pvalues[4],
+                    pvalues[5]
+                );
+                pvalues.clear();
+                int promotionClockTick = clockticks + 100;
+                list.insertNode(pvalues[3], promotionClockTick);
             }
         }
 
@@ -117,7 +226,9 @@ void scheduler(vector<vector<int>> processes){
         //}
         //print(processes);
         clockticks++;
+	printer = true;
     }
+    return clockticks;
 }
 
 
@@ -131,9 +242,14 @@ int main(int argc,  char **argv){
     
     sort(input.begin(), input.end(), compareArrival);
 
+    int startTime = input[0][2];
+
     cout << "Enter the time quantum: ";
     cin >> tq;
 
-    scheduler(input);
+    int endTime = scheduler(input);
+
+    int totalTime = endTime - startTime;
     
+    //cout << "Average Turn Around Time = " << totalTime/input.size();
 }

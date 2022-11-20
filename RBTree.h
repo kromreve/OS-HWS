@@ -19,6 +19,7 @@ private:
     void postOrderRec(NodePtr node);
     NodePtr priorityOrderRec(NodePtr node);
     NodePtr searchTreeRec(NodePtr node, int id);
+    NodePtr getLeftmostRec(NodePtr node);
     void delUpdate(NodePtr x);
     void redBlackTransplant(NodePtr u, NodePtr v);
     void deleteNodeRec(NodePtr node, int id);
@@ -43,6 +44,7 @@ public:
     int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
+    NodePtr getLeftmost();
     void deleteNode(int id);
     void formatPrint();
 };
