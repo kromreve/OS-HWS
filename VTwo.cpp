@@ -78,7 +78,7 @@ int scheduler(vector<vector<int>> processes){
     int iterator = 0;
     RBTree queue;
     Linkedlist list;
-    vector <int> CPU[7];
+    vector <int> CPU;
     bool printer = true;
     
 
@@ -86,17 +86,17 @@ int scheduler(vector<vector<int>> processes){
 
         if(CPU.empty() && !queue.getRoot() == NULL){  //start running process with highest priority
             
-            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to cpu 
+            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
             CPU[0] = temp->pid;
             CPU[1] = temp->burst;
             CPU[2] = temp->arrivalValue;
             CPU[3] = temp->priority;
             CPU[4] = temp->deadlineValue;
             CPU[5] = temp->ioValue;
-  	    list.deleteNode(CPU[0]);
+  	        list.deleteNode(CPU[0]);
             queue.deleteNode(temp);
             
-            CPU[6] = clockTick +tq;
+            CPU[6] = clockticks +tq;
 		
 	#ifdef debug
                 if(printer == true){
@@ -145,9 +145,9 @@ int scheduler(vector<vector<int>> processes){
             #endif
 		//demote
 		int promotionClockTick = clockticks + 100;
-		int currentPID = CPU[0]
-		int pri = pvalues[3];
-                pvalues[3] = pri - 10;
+		int currentPID = CPU[0];
+		int pri = CPU[3];
+                CPU[3] = pri - 10;
                 //queue.deleteNode(queue.searchTree(currentPID));
                 //list.deleteNode(1);
                 queue.insert(
@@ -170,7 +170,7 @@ int scheduler(vector<vector<int>> processes){
         if(processes[iterator][2] == clockticks){
             //Loop to check if the next process also arrives at the same clock tick    
             while(processes[iterator][2]==clockticks && processes.size() > 0){
-		    totBurst = totBurst + processes[iterator][1];
+		    totBurst = totBurst + processes[iterator][1]; //adds arriving process burst to total burst
                 queue.insert(
                     processes[iterator][0],
                     processes[iterator][1],
@@ -255,6 +255,7 @@ int scheduler(vector<vector<int>> processes){
 	printer = true;
     }
     return clockticks;
+}
 }
 
 
