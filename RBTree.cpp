@@ -62,16 +62,21 @@ struct Node {
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
-        if (node == TNULL || id == node->pid) {
-            return node;
-        }
-
-        if (id != node->pid) {
+        if (node != TNULL) {
             searchTreeRec(node->left, id);
+            if (node->pid == id) {
+                return node;
+            }
             searchTreeRec(node->right, id);
         }
         
     }
+
+    // NotePtr RBTree::getLeftmostRec(NodePtr node) {
+    //     if (node != TNULL) {
+    //         getLeftmostRec(node->left);
+    //     }
+    // }
 
     void RBTree::delUpdate(NodePtr x) {
         NodePtr s;

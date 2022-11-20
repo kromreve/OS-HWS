@@ -19,6 +19,7 @@ private:
     void postOrderRec(NodePtr node);
     NodePtr priorityOrderRec(NodePtr node);
     NodePtr searchTreeRec(NodePtr node, int id);
+    NodePtr getLeftmostRec(NodePtr node);
     void delUpdate(NodePtr x);
     void redBlackTransplant(NodePtr u, NodePtr v);
     void deleteNodeRec(NodePtr node);
