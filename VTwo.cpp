@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "RBTree.h"
 #include "LinkedList.h"
-//#define DBUG
+#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -87,18 +87,20 @@ int scheduler(vector<vector<int>> processes){
         if(CPU.empty() && !queue.getRoot() == NULL){  //start running process with highest priority
             
             NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
-            CPU[0] = temp->pid;
-            CPU[1] = temp->burst;
-            CPU[2] = temp->arrivalValue;
-            CPU[3] = temp->priority;
-            CPU[4] = temp->deadlineValue;
-            CPU[5] = temp->ioValue;
+
+
+            CPU[0] = *queue.exportProcess(temp);
+            CPU[1] = *queue.exportProcess(temp)+1;
+            CPU[2] = *queue.exportProcess(temp)+2;
+            CPU[3] = *queue.exportProcess(temp)+3;
+            CPU[4] = *queue.exportProcess(temp)+4;
+            CPU[5] = *queue.exportProcess(temp)+5;
   	        list.deleteNode(CPU[0]);
             queue.deleteNode(temp);
             
             CPU[6] = clockticks +tq;
 		
-	#ifdef debug
+	#ifdef DBUG
                 if(printer == true){
                     cout << "Clock Tick " << clockticks << ": |";
 		     	    printer = false;
@@ -112,7 +114,7 @@ int scheduler(vector<vector<int>> processes){
 
         if(!CPU.empty()){
             if(CPU[1] == 0){  //process finishes
-                    #ifdef debug
+                    #ifdef DBUG
                         if(printer == true){
                             cout << "Clock Tick " << clockticks << ": |";
 		        	        printer = false;
@@ -133,7 +135,7 @@ int scheduler(vector<vector<int>> processes){
             }
 		
             if(CPU[6] == clockticks){ //time quantum expires
-            #ifdef debug
+            #ifdef DBUG
                  if(printer == true){
                         cout << "Clock Tick " << clockticks << ": |";
 		        	    printer = false;
@@ -179,7 +181,7 @@ int scheduler(vector<vector<int>> processes){
                     processes[iterator][4],
                     processes[iterator][5]
                 );
-		#ifdef debug
+		#ifdef DBUG
                         if(printer == true){
                             cout << "Clock Tick " << clockticks << ": |";
 		            printer = false;
@@ -201,12 +203,13 @@ int scheduler(vector<vector<int>> processes){
                 processes.erase(processes.begin());
             }
 		
+	
 
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
             if(list.getLastClockTick()==clockticks){
                 int process = list.getLastPID();
-		#ifdef debug
+		#ifdef DBUG
                 if(printer == true){
                         cout << "Clock Tick " << clockticks << ": |";
                 printer = false;
@@ -274,9 +277,10 @@ int main(int argc,  char **argv){
     cin >> tq;
 
     //int endTime = scheduler(input);
-
+    scheduler(input);
     //int totalTime = endTime - startTime;
     
     cout << "Average Turn Around Time = " << tat/input.size();
+    cout << "\t";
     cout << "Average Wait Time = " << (tat - totBurst)/input.size();
 }
