@@ -13,6 +13,9 @@ using namespace std;
 
 int numNegatives = 0;
 int tq;
+int tat;
+int wt;
+int totBurst;
 
 
 vector<vector<int>> readInput(const string filename){
@@ -77,6 +80,7 @@ int scheduler(vector<vector<int>> processes){
     Linkedlist list;
     int cpu[7];
     bool printer = true;
+    
 
     while(1){
 
@@ -115,6 +119,7 @@ int scheduler(vector<vector<int>> processes){
                         }
                         cout << " Process " << processes[iterator][0] << " finishes running" << '\n';
                     #endif
+		    tat = tat + (clockticks - CPU[2]);
                     queue.deleteNode(queue.searchTree(CPU[0]));
                     CPU.clear();
                    
@@ -144,6 +149,7 @@ int scheduler(vector<vector<int>> processes){
         if(processes[iterator][2] == clockticks){
             //Loop to check if the next process also arrives at the same clock tick    
             while(processes[iterator][2]==clockticks && processes.size() > 0){
+		    totBurst = totBurst + processes[iterator][1];
                 queue.insert(
                     processes[iterator][0],
                     processes[iterator][1],
@@ -161,7 +167,7 @@ int scheduler(vector<vector<int>> processes){
 			    cout << "\t\t";
 			}
                 cout << " Process " << processes[iterator][0] << " arrives" << '\n';
-                #endif	
+                #endif
                 //cout << "Process " << processes[iterator][0] << " arrived at clock tick " << clockticks << '\n';
 
                 //Insert process into linked list and calculate the clock tick that process will have to promote, if it is still in the tree
@@ -237,14 +243,15 @@ int main(int argc,  char **argv){
     
     sort(input.begin(), input.end(), compareArrival);
 
-    int startTime = input[0][2];
+    //int startTime = input[0][2];
 
     cout << "Enter the time quantum: ";
     cin >> tq;
 
-    int endTime = scheduler(input);
+    //int endTime = scheduler(input);
 
-    int totalTime = endTime - startTime;
+    //int totalTime = endTime - startTime;
     
-    //cout << "Average Turn Around Time = " << totalTime/input.size();
+    cout << "Average Turn Around Time = " << tat/input.size();
+    cout << "Average Wait Time = " << (tat - totBurst)/input.size();
 }
