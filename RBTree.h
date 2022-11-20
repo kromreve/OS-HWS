@@ -21,7 +21,7 @@ private:
     NodePtr searchTreeRec(NodePtr node, int id);
     void delUpdate(NodePtr x);
     void redBlackTransplant(NodePtr u, NodePtr v);
-    void deleteNodeRec(NodePtr node, int id, int pri);
+    void deleteNodeRec(NodePtr node, int id);
     void fixInsert(NodePtr k);
     void printRec(NodePtr root, string indent, bool last);
 
@@ -43,7 +43,7 @@ public:
     int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     NodePtr getRoot();
-    void deleteNode(int value);
+    void deleteNode(int id);
     void formatPrint();
 };
 #endif
