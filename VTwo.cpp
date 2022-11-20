@@ -78,14 +78,27 @@ int scheduler(vector<vector<int>> processes){
     int iterator = 0;
     RBTree queue;
     Linkedlist list;
-    int cpu[7];
+    vector <int> CPU[7];
     bool printer = true;
     
 
     while(1){
 
-        if(CPU.empty() && !queue.getRoot() == null){  //start running process with highest priority
-            #ifdef debug
+        if(CPU.empty() && !queue.getRoot() == NULL){  //start running process with highest priority
+            
+            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to cpu 
+            CPU[0] = temp->pid;
+            CPU[1] = temp->burst;
+            CPU[2] = temp->arrivalValue;
+            CPU[3] = temp->priority;
+            CPU[4] = temp->deadlineValue;
+            CPU[5] = temp->ioValue;
+  	    list.deleteNode(CPU[0]);
+            queue.deleteNode(temp);
+            
+            CPU[6] = clockTick +tq;
+		
+	#ifdef debug
                 if(printer == true){
                     cout << "Clock Tick " << clockticks << ": |";
 		     	    printer = false;
@@ -93,19 +106,8 @@ int scheduler(vector<vector<int>> processes){
 		     	else{
 		     	    cout << "\t\t";
                 }
-                 cout << " Process " << processes[iterator][0] << " enters the CPU" << '\n';
-             #endif
-            
-            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to cpu 
-            cpu[0] = temp->pid;
-            cpu[1] = temp->burst;
-            cpu[2] = temp->arrivalValue;
-            cpu[3] = temp->priority;
-            cpu[4] = temp->deadlineValue;
-            cpu[5] = temp->ioValue;
-            queue.deleteNode(temp);
-            
-            CPU[6] = clockTick +tq;
+                 cout << " Process " << CPU[0] << " enters the CPU" << '\n';
+        #endif
         }
 
         if(!CPU.empty()){
@@ -118,9 +120,9 @@ int scheduler(vector<vector<int>> processes){
 		         	    else{
 		         	        cout << "\t\t";
                         }
-                        cout << " Process " << processes[iterator][0] << " finishes running" << '\n';
+                        cout << " Process " << CPU[0] << " finishes running" << '\n';
                     #endif
-		    tat = tat + (clockticks - CPU[2]);
+		    tat = tat + (clockticks - CPU[2]); 
                     queue.deleteNode(queue.searchTree(CPU[0]));
                     CPU.clear();
                    
@@ -129,6 +131,7 @@ int scheduler(vector<vector<int>> processes){
                 int temp = CPU[1];
                 CPU[1] = temp--;
             }
+		
             if(CPU[6] == clockticks){ //time quantum expires
             #ifdef debug
                  if(printer == true){
@@ -138,14 +141,31 @@ int scheduler(vector<vector<int>> processes){
 		    	else{
 		    	    cout << "\t\t";
                 }
-                    cout << " Process " << processes[iterator][0] << " is demoted" << '\n';
+                    cout << " Process " << CPU[0] << " is demoted" << '\n';
             #endif
+		//demote
+		int promotionClockTick = clockticks + 100;
+		int currentPID = CPU[0]
+		int pri = pvalues[3];
+                pvalues[3] = pri - 10;
+                //queue.deleteNode(queue.searchTree(currentPID));
+                //list.deleteNode(1);
+                queue.insert(
+                    cpu[0],
+                    cpu[1],
+                    cpu[2],
+                    cpu[3],
+                    cpu[4],
+                    cpu[5]
+                );
+                list.insertNode(currentPID, promotionClockTick);
                 CPU.clear();
-                //demote
+                
             }
         
         }
-
+	 
+	for(int i =0; i< processes.size(); i++){
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
             //Loop to check if the next process also arrives at the same clock tick    
@@ -180,7 +200,8 @@ int scheduler(vector<vector<int>> processes){
 
                 processes.erase(processes.begin());
             }
-        }
+		iterator++;
+	}
 
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
@@ -194,9 +215,9 @@ int scheduler(vector<vector<int>> processes){
 		    	else{
 			    cout << "\t\t";
 			}
-                cout << " Process " << processes[iterator][0] << " is promoted" << '\n';
+                cout << " Process " << process << " is promoted" << '\n';
                 #endif
-                cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
+                //cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
                 //Extracts the node/process that needs to be promoted
                 vector<int> pvalues = {*(queue.exportProcess(queue.searchTree(process))),
                                     *(queue.exportProcess(queue.searchTree(process))+1),
@@ -220,14 +241,17 @@ int scheduler(vector<vector<int>> processes){
                 pvalues.clear();
                 int promotionClockTick = clockticks + 100;
                 list.insertNode(pvalues[3], promotionClockTick);
+		 
             }
         }
 
-        //if(q is empty && cpu is empty && processes is empty){
-        //    break;
-        //}
+        if(!queue.getRoot() == NULL && CPU.empty()){
+           break;
+        }
         //print(processes);
         clockticks++;
+	iterator = 0;
+	
 	printer = true;
     }
     return clockticks;
