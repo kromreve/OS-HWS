@@ -7,8 +7,9 @@ TARGET = HWS
 
 ${TARGET}: ${TARGET}.o 
 	${CC} ${CFLAGS} -o ${TARGET} ${TARGET}.o
-${TARGET}.o: ${TARGET}.cpp ${TARGET}.hpp
+${TARGET}.o: ${TARGET}.cpp
 	${CC} ${CFLAGS} -c ${TARGET}.cpp
+	
   
 clean:
 	if [ -f *.o ]; then rm *.o; fi
