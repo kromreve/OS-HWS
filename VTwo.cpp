@@ -80,68 +80,65 @@ int scheduler(vector<vector<int>> processes){
 
     while(1){
 
-        // if(CPU.empty() && !queue.empty()){  //start running process with highest priority
-		// #ifdef debug
-        //                 if(printer == true){
-        //                     cout << "Clock Tick " << clockticks << ": |";
-		// 	    printer = false;
-        //                 }
-		//     	else{
-		// 	    cout << "\t\t";
+        if(CPU.empty() && !queue.getRoot() == null){  //start running process with highest priority
+            #ifdef debug
+                if(printer == true){
+                    cout << "Clock Tick " << clockticks << ": |";
+		     	    printer = false;
+                }
+		     	else{
+		     	    cout << "\t\t";
+                }
+                 cout << " Process " << processes[iterator][0] << " enters the CPU" << '\n';
+             #endif
+            Node temp = queue.maximum(node); //add process with highest priority to cpu 
+            cpu[0] = temp.pid;
+            cpu[1] = temp.burst;
+            cpu[2] = temp.arrivalValue;
+            cpu[3] = temp.priority;
+            cpu[4] = temp.deadlineValue;
+            cpu[5] = temp.ioValue;
+            queue.deleteNode(temp);
+            
+            CPU[6] = clockTick +tq;
+        }
 
-        //         cout << " Process " << processes[iterator][0] << " enters the CPU" << '\n';
-        //         #endif	
-
-        //     //add process with highest to cpu
-
-        //     CPU[6] = clockticks +tq;
-        // }
-
-        // if(!CPU.empty()){
-
-        //     if(CPU[1] == 0){  //process finishes
-		//     #ifdef debug
-        //                 if(printer == true){
-        //                     cout << "Clock Tick " << clockticks << ": |";
-		// 	    printer = false;
-        //                 }
-		//     	else{
-		// 	    cout << "\t\t";
-
-        //         cout << " Process " << processes[iterator][0] << " finishes running" << '\n';
-        //         #endif	
-
-        //             //queue.remove(CPU);
-
-        //             CPU.remove(CPU);
-
-        //         }
-
-        //     else{  //decrement burst
-
-        //         int temp = CPU[1];
-
-        //         CPU[1] = temp--;
-
-        //     }
-
-        //     if(CPU[6] == clockTick){ //time quantum expires
-		// #ifdef debug
-        //                 if(printer == true){
-        //                     cout << "Clock Tick " << clockticks << ": |";
-		// 	    printer = false;
-        //                 }
-		//     	else{
-		// 	    cout << "\t\t";
-
-        //         cout << " Process " << processes[iterator][0] << " is demoted" << '\n';
-        //         #endif	
-
-        //         CPU.remove(CPU);
-        //         //demote
-
-        //     }
-        // }
+        if(!CPU.empty()){
+            if(CPU[1] == 0){  //process finishes
+                    #ifdef debug
+                        if(printer == true){
+                            cout << "Clock Tick " << clockticks << ": |";
+		        	        printer = false;
+                        }
+		         	    else{
+		         	        cout << "\t\t";
+                        }
+                        cout << " Process " << processes[iterator][0] << " finishes running" << '\n';
+                    #endif
+                    queue.deleteNode(queue.searchTree(CPU[0]));
+                    CPU.clear();
+                   
+                }
+            else{  //decrement burst
+                int temp = CPU[1];
+                CPU[1] = temp--;
+            }
+            if(CPU[6] == clockticks){ //time quantum expires
+            #ifdef debug
+                 if(printer == true){
+                        cout << "Clock Tick " << clockticks << ": |";
+		        	    printer = false;
+                 }
+		    	else{
+		    	    cout << "\t\t";
+                }
+                    cout << " Process " << processes[iterator][0] << " is demoted" << '\n';
+            #endif
+                CPU.clear();
+                //demote
+            }
+        
+        }
 
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
@@ -162,7 +159,7 @@ int scheduler(vector<vector<int>> processes){
                         }
 		    	else{
 			    cout << "\t\t";
-
+			}
                 cout << " Process " << processes[iterator][0] << " arrives" << '\n';
                 #endif	
                 //cout << "Process " << processes[iterator][0] << " arrived at clock tick " << clockticks << '\n';
@@ -189,7 +186,7 @@ int scheduler(vector<vector<int>> processes){
                     }
 		    	else{
 			    cout << "\t\t";
-
+			}
                 cout << " Process " << processes[iterator][0] << " is promoted" << '\n';
                 #endif
                 cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
