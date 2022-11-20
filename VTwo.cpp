@@ -95,13 +95,14 @@ int scheduler(vector<vector<int>> processes){
                 }
                  cout << " Process " << processes[iterator][0] << " enters the CPU" << '\n';
              #endif
-            Node temp = queue.maximum(node); //add process with highest priority to cpu 
-            cpu[0] = temp.pid;
-            cpu[1] = temp.burst;
-            cpu[2] = temp.arrivalValue;
-            cpu[3] = temp.priority;
-            cpu[4] = temp.deadlineValue;
-            cpu[5] = temp.ioValue;
+            
+            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to cpu 
+            cpu[0] = temp->pid;
+            cpu[1] = temp->burst;
+            cpu[2] = temp->arrivalValue;
+            cpu[3] = temp->priority;
+            cpu[4] = temp->deadlineValue;
+            cpu[5] = temp->ioValue;
             queue.deleteNode(temp);
             
             CPU[6] = clockTick +tq;
