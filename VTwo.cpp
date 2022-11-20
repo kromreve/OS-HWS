@@ -79,38 +79,38 @@ int scheduler(vector<vector<int>> processes){
 
     while(1){
 
-        if(CPU.empty() && !queue.empty()){  //start running process with highest priority
+        // if(CPU.empty() && !queue.empty()){  //start running process with highest priority
 
-            //add process with highest to cpu
+        //     //add process with highest to cpu
 
-            CPU[6] = clockticks +tq;
-        }
+        //     CPU[6] = clockticks +tq;
+        // }
 
-        if(!CPU.empty()){
+        // if(!CPU.empty()){
 
-            if(CPU[1] == 0){  //process finishes
+        //     if(CPU[1] == 0){  //process finishes
 
-                    queue.remove(CPU);
+        //             queue.remove(CPU);
 
-                    CPU.remove(CPU);
+        //             CPU.remove(CPU);
 
-                }
+        //         }
 
-            else{  //decrement burst
+        //     else{  //decrement burst
 
-                int temp = CPU[1];
+        //         int temp = CPU[1];
 
-                CPU[1] = temp--;
+        //         CPU[1] = temp--;
 
-            }
+        //     }
 
-            if(CPU[6] == clockTick){ //time quantum expires
+        //     if(CPU[6] == clockTick){ //time quantum expires
 
-                CPU.remove(CPU);
-                //demote
+        //         CPU.remove(CPU);
+        //         //demote
 
-            }
-        }
+        //     }
+        // }
 
         //if next process's arrival time matches current clock tick, add it to the tree and remove it from the input vector
         if(processes[iterator][2] == clockticks){
@@ -143,7 +143,7 @@ int scheduler(vector<vector<int>> processes){
                 int process = list.getLastPID();
                 cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
                 //Extracts the node/process that needs to be promoted
-                int pvalues[6] = {*(queue.exportProcess(queue.searchTree(process))),
+                vector<int> pvalues = {*(queue.exportProcess(queue.searchTree(process))),
                                     *(queue.exportProcess(queue.searchTree(process))+1),
                                     *(queue.exportProcess(queue.searchTree(process))+2),
                                     *(queue.exportProcess(queue.searchTree(process))+3),
@@ -152,7 +152,7 @@ int scheduler(vector<vector<int>> processes){
                                     };
                 int pri = pvalues[3];
                 pvalues[3] = pri + 10;
-                queue.deleteNode(process, pri);
+                queue.deleteNode(queue.searchTree(process));
                 list.deleteNode(1);
                 queue.insert(
                     pvalues[0],
@@ -162,6 +162,7 @@ int scheduler(vector<vector<int>> processes){
                     pvalues[4],
                     pvalues[5]
                 );
+                pvalues.clear();
                 int promotionClockTick = clockticks + 100;
                 list.insertNode(pvalues[3], promotionClockTick);
             }

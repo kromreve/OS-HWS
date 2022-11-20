@@ -144,20 +144,21 @@ struct Node {
         v->parent = u->parent;
     }
 
-    void RBTree::deleteNodeRec(NodePtr node, int id, int pri) {
-        NodePtr z = TNULL;
+    void RBTree::deleteNodeRec(NodePtr node) {
+        //NodePtr z = TNULL;
+        NodePtr z = node;
         NodePtr x, y;
-        while (node != TNULL) {
-            if (node->priority == pri && node->pid == id) {
-                z = node;
-            }
+        // while (node != TNULL) {
+        //     if (node->priority == pri && node->pid == id) {
+        //         z = node;
+        //     }
 
-            if (node->priority <= pri) {
-                node = node->right;
-            } else {
-                node = node->left;
-            }
-        }
+        //     if (node->priority <= pri) {
+        //         node = node->right;
+        //     } else {
+        //         node = node->left;
+        //     }
+        // }
 
         if (z == TNULL) {
             cout<<"No key found"<<endl;
@@ -427,8 +428,8 @@ struct Node {
         return this->root;
     }
 
-    void RBTree::deleteNode(int id, int pri) {
-        deleteNodeRec(this->root, id, pri);
+    void RBTree::deleteNode(NodePtr node) {
+        deleteNodeRec(node);
     }
 
     void RBTree::formatPrint() {
