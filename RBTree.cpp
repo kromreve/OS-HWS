@@ -59,6 +59,7 @@ struct Node {
             return node;
             priorityOrderRec(node->left);
         }
+        return NULL;
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
@@ -81,7 +82,7 @@ struct Node {
             cout << "node pid (searchTreeRec): " << queriedNode->pid << endl;
             return queriedNode;
         }
-        
+        return NULL;
     }
 
     // NotePtr RBTree::getLeftmostRec(NodePtr node) {

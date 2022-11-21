@@ -54,6 +54,9 @@ public:
 
     //check to see if the list is empty
     bool isEmpty();
+
+    //Gets the position of a process in the list by its ID
+    int getOffsetByID(int);
   
     // Function to delete the
     // node at given position
@@ -188,6 +191,22 @@ bool Linkedlist::isEmpty(){
         return false;
     }
 }
+
+int Linkedlist::getOffsetByID(int pid){
+    Node* temp = head;
+    int offset = 1;
+
+    while(temp != NULL){
+        if(temp->PID==pid){
+            return offset;
+        } else {
+            temp = temp->next;
+            offset++;
+        }
+    }
+    cout << "Process not found" << '\n';
+    return 0;
+}   
   
 // Function to print the
 // nodes of the linked list.
