@@ -11,7 +11,7 @@ class RBTree {
 private:
 
     NodePtr root;
-    NodePtr TNULL;
+    
 
     void createEmptyNode(NodePtr node, NodePtr parent);
     void preOrderRec(NodePtr node);
@@ -28,6 +28,7 @@ private:
 
 public:
 
+    NodePtr TNULL;
     RBTree();
     void preOrder();
     void inOrder();

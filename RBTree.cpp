@@ -59,6 +59,7 @@ struct Node {
             return node;
             priorityOrderRec(node->left);
         }
+        return NULL;
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
@@ -69,7 +70,7 @@ struct Node {
             }
             searchTreeRec(node->right, id);
         }
-        
+        return NULL;
     }
 
     // NotePtr RBTree::getLeftmostRec(NodePtr node) {
