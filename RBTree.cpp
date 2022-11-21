@@ -447,6 +447,15 @@ struct Node {
         fixInsert(node);
     }
 
+    void RBTree::printProcess(NodePtr node) {
+        cout << "printProcess called." << endl;
+        cout << "Node #" << node->pid << endl;
+        cout << "Burst: " << node->burst << endl;
+        cout << "Arrival: " << node->arrivalValue << endl;
+        cout << "Priority: " << node->priority << endl;
+        cout << "IO: " << node->ioValue << endl;
+    }
+
     NodePtr RBTree::getRoot() {
         return this->root;
     }
