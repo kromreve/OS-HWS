@@ -46,7 +46,11 @@ public:
     NodePtr predecessor(NodePtr x);
     void leftRotate(NodePtr x);
     void rightRotate(NodePtr x);
-    NodePtr getTopNode();
+    int returnPid(NodePtr node);
+    int returnBurst(NodePtr node);
+    int returnArrival(NodePtr node);
+    int returnPriority(NodePtr node);
+    int returnBasePriority(NodePtr node);
     int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
     void printProcess(NodePtr node);

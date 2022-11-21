@@ -389,6 +389,26 @@ struct Node {
         x->parent = y;
     }
 
+    int RBTree::returnPid(NodePtr node) {
+        return node->pid;
+    }
+
+    int RBTree::returnBurst(NodePtr node) {
+        return node->burst;
+    }
+
+    int RBTree::returnArrival(NodePtr node) {
+        return node->arrivalValue;
+    }
+
+    int RBTree::returnPriority(NodePtr node) {
+        return node->priority;
+    }
+
+    int RBTree::returnBasePriority(NodePtr node) {
+        return node->basePriority;
+    }
+
     int * RBTree::exportProcess(NodePtr node) {
         static int pList[6] = {
             node->pid, 
