@@ -85,16 +85,15 @@ int scheduler(vector<vector<int>> processes){
     while(1){
 
         if(CPU.empty() && queue.getRoot() != queue.TNULL){ //start running process with highest priority
-            cout << "Hello from CPU, time to run" << '\n';
             NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
-            cout << "CPU Process added." << '\n';
             CPU.push_back(*queue.exportProcess(temp));
             CPU.push_back(*queue.exportProcess(temp)+1);
             CPU.push_back(*queue.exportProcess(temp)+2);
             CPU.push_back(*queue.exportProcess(temp)+3);
             CPU.push_back(*queue.exportProcess(temp)+4);
             CPU.push_back(*queue.exportProcess(temp)+5);
-  	        //list.deleteNode(CPU[0]); //Delete node deletes based on position, not by ID
+            
+  	        list.deleteNode(list.getOffsetByID(CPU[0]));
             //queue.deleteNode(temp);
             
             CPU.push_back(clockticks + tq);

@@ -54,6 +54,8 @@ public:
 
     //check to see if the list is empty
     bool isEmpty();
+
+    int getOffsetByID(int);
   
     // Function to delete the
     // node at given position
@@ -209,6 +211,22 @@ void Linkedlist::printList()
     }
 }
 
+int Linkedlist::getOffsetByID(int pid){
+    Node* temp = head;
+    int offset = 1;
+
+    while(temp != NULL){
+        if(temp->PID==pid){
+            return offset;
+        } else {
+            temp = temp->next;
+            offset++;
+        }
+    }
+    cout << "Process not found" << '\n';
+    return 0;
+}   
+
 int main(){
     Linkedlist list;
 
@@ -219,8 +237,5 @@ int main(){
 
     //list.printList();
 
-    cout << list.getLastClockTick() << '\n';
-    cout << list.getLastPID();
-
-    
+    cout << list.getOffsetByID(69) << '\n';
 }
