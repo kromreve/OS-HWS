@@ -238,5 +238,10 @@ int main(){
 
     //list.printList();
 
-    cout << list.getOffsetByID(69) << '\n';
+    //cout << list.getOffsetByID(69) << '\n';
+
+    vector<int> cpu = {11, 22, 33, 44};
+    cout << "Vector Size: " << cpu.size() << endl;
+    cpu.clear();
+    cout << "Vector Size: " << cpu.size() << endl;
 }

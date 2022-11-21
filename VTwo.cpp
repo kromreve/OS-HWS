@@ -78,26 +78,30 @@ int scheduler(vector<vector<int>> processes){
     int iterator = 0;
     RBTree queue;
     Linkedlist list;
-    vector <int> CPU;
+    vector<int> CPU;
     bool printer = true;
+    NodePtr temp;
     
 
     while(1){
 
         if(CPU.empty() && queue.getRoot() != queue.TNULL){ //start running process with highest priority
-            NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
+            temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
+            queue.formatPrint();
             CPU.push_back(*(queue.exportProcess(temp)));
             CPU.push_back(*(queue.exportProcess(temp)+1));
             CPU.push_back(*(queue.exportProcess(temp)+2));
             CPU.push_back(*(queue.exportProcess(temp)+3));
             CPU.push_back(*(queue.exportProcess(temp)+4));
             CPU.push_back(*(queue.exportProcess(temp)+5));
-
-  	        list.deleteNode(list.getOffsetByID(CPU[0]));
-            queue.deleteNode(temp);
-            queue.formatPrint();
-            
             CPU.push_back(clockticks + tq);
+            
+            cout << "Process ID to go into CPU: " << CPU[0] << endl;
+  	        list.deleteNode(list.getOffsetByID(CPU[0]));
+            queue.deleteNode(queue.searchTree(CPU[0]));
+            //queue.formatPrint();
+            
+            
 		
 	    #ifdef DBUG
             if(printer == true){
@@ -112,7 +116,7 @@ int scheduler(vector<vector<int>> processes){
         }
 
         if(!CPU.empty()){ //Process is currently running
-            queue.formatPrint();
+            //queue.formatPrint();
             if(CPU[1] == 0){  //process finishes
                 #ifdef DBUG
                    if(printer == true){
@@ -125,13 +129,15 @@ int scheduler(vector<vector<int>> processes){
                         cout << " Process " << CPU[0] << " finishes running" << '\n';
                 #endif
 		        //tat = tat + (clockticks - CPU[2]); 
-                queue.deleteNode(queue.searchTree(CPU[0]));
-                CPU.clear();               
+                //queue.deleteNode(queue.searchTree(CPU[0]));
+                CPU.clear();
+                temp = nullptr;
+                cout << "CPU Cleared." << " Size: " << CPU.size() << endl;               
             }
             else{  //decrement burst
                 int temp = CPU[1]-1;
                 CPU[1] = temp;
-                cout << "Burst: " << CPU[1] << endl;
+                //cout << "Burst: " << CPU[1] << endl;
             }
 		
             if(!CPU.empty() && CPU[6] == clockticks && CPU[1] > 0){ //time quantum expires
@@ -150,8 +156,8 @@ int scheduler(vector<vector<int>> processes){
 		        int currentPID = CPU[0];
 		        int pri = CPU[3];
                 CPU[3] = pri - 10;
-                queue.deleteNode(queue.searchTree(currentPID));
-                list.deleteNode(1);
+                //queue.deleteNode(queue.searchTree(currentPID));
+                //list.deleteNode(1);
                 queue.insert(
                     CPU[0],
                     CPU[1],
@@ -162,6 +168,7 @@ int scheduler(vector<vector<int>> processes){
                 );
                 list.insertNode(currentPID, promotionClockTick);
                 CPU.clear();
+                temp = nullptr;
             }
         }
         
