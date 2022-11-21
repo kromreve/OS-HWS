@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "RBTree.h"
 #include "LinkedList.h"
-#define DBUG
+//#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -87,16 +87,19 @@ int scheduler(vector<vector<int>> processes){
 
         if(CPU.empty() && queue.getRoot() != queue.TNULL){ //start running process with highest priority
             temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
-            queue.formatPrint();
-            CPU.push_back(*(queue.exportProcess(temp)));
-            CPU.push_back(*(queue.exportProcess(temp)+1));
-            CPU.push_back(*(queue.exportProcess(temp)+2));
-            CPU.push_back(*(queue.exportProcess(temp)+3));
-            CPU.push_back(*(queue.exportProcess(temp)+4));
-            CPU.push_back(*(queue.exportProcess(temp)+5));
+            //queue.formatPrint();
+
+            //queue.printProcess(temp);
+            //cout << "Process ID from tree: " << *(queue.exportProcess(temp)) << endl;
+            CPU.push_back(queue.returnPid(temp));
+            CPU.push_back(queue.returnBurst(temp));
+            CPU.push_back(queue.returnArrival(temp));
+            CPU.push_back(queue.returnPriority(temp));
+            CPU.push_back(queue.returnDeadline(temp));
+            CPU.push_back(queue.returnIo(temp));
             CPU.push_back(clockticks + tq);
             
-            cout << "Process ID to go into CPU: " << CPU[0] << endl;
+            //cout << "Process ID to go into CPU: " << CPU[0] << endl;
   	        list.deleteNode(list.getOffsetByID(CPU[0]));
             queue.deleteNode(queue.searchTree(CPU[0]));
             //queue.formatPrint();
@@ -132,7 +135,7 @@ int scheduler(vector<vector<int>> processes){
                 //queue.deleteNode(queue.searchTree(CPU[0]));
                 CPU.clear();
                 temp = nullptr;
-                cout << "CPU Cleared." << " Size: " << CPU.size() << endl;               
+                //cout << "CPU Cleared." << " Size: " << CPU.size() << endl;               
             }
             else{  //decrement burst
                 int temp = CPU[1]-1;
@@ -155,7 +158,13 @@ int scheduler(vector<vector<int>> processes){
 		        int promotionClockTick = clockticks + 100;
 		        int currentPID = CPU[0];
 		        int pri = CPU[3];
-                CPU[3] = pri - 10;
+                int basePriTemp = queue.returnBasePriority(queue.searchTree(CPU[0]));
+
+                if(pri - 10 < basePriTemp){
+                    CPU[3] = basePriTemp;
+                } else {
+                    CPU[3] = pri - 10;
+                }
                 //queue.deleteNode(queue.searchTree(currentPID));
                 //list.deleteNode(1);
                 queue.insert(
@@ -211,9 +220,9 @@ int scheduler(vector<vector<int>> processes){
         }
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
-            if(list.getLastClockTick()==clockticks){
+            while(list.getLastClockTick()==clockticks && !list.isEmpty()){
                 int process = list.getLastPID();
-		        #ifdef DBUG
+                #ifdef DBUG
                     if(printer == true){
                         cout << "Clock Tick " << clockticks << ": |";
                         printer = false;
@@ -223,17 +232,21 @@ int scheduler(vector<vector<int>> processes){
                     }
                     cout << " Process " << process << " is promoted" << '\n';
                 #endif
-                //cout << "Process " << process << " promoted at clock tick "<< clockticks << '\n';
                 //Extracts the node/process that needs to be promoted
-                vector<int> pvalues = {*(queue.exportProcess(queue.searchTree(process))),
-                                    *(queue.exportProcess(queue.searchTree(process))+1),
-                                    *(queue.exportProcess(queue.searchTree(process))+2),
-                                    *(queue.exportProcess(queue.searchTree(process))+3),
-                                    *(queue.exportProcess(queue.searchTree(process))+4),
-                                    *(queue.exportProcess(queue.searchTree(process))+5)
-                                    };
+                vector<int> pvalues = {
+                    queue.returnPid(queue.searchTree(process)),
+                    queue.returnBurst(queue.searchTree(process)),
+                    queue.returnArrival(queue.searchTree(process)),
+                    queue.returnPriority(queue.searchTree(process)),
+                    queue.returnDeadline(queue.searchTree(process)),
+                    queue.returnIo(queue.searchTree(process))
+                };
                 int pri = pvalues[3];
-                pvalues[3] = pri + 10;
+                if(pri + 10 > 99){
+                    pvalues[3] = 99;
+                } else {
+                    pvalues[3] = pri + 10;
+                }
                 queue.deleteNode(queue.searchTree(process));
                 list.deleteNode(1);
                 queue.insert(
@@ -244,11 +257,11 @@ int scheduler(vector<vector<int>> processes){
                     pvalues[4],
                     pvalues[5]
                 );
-                pvalues.clear();
+                
                 int promotionClockTick = clockticks + 100;
                 list.insertNode(pvalues[3], promotionClockTick);
-		 
-            }
+                pvalues.clear();
+                }
         }
         //print(processes);
         clockticks++;
@@ -278,12 +291,12 @@ int main(int argc,  char **argv){
     cout << "Enter the time quantum: ";
     cin >> tq;
     
-    scheduler(input);
-    int endTime = scheduler(input);
-    int totalTime = endTime - startTime;
+    //scheduler(input);
+    double endTime = scheduler(input);
+    double totalTime = endTime - startTime;
     
     cout << "Average Turn Around Time = " << totalTime/input.size();
-    // cout << "Average Turn Around Time = " << tat/input.size();
-    //cout << "\t";
-    //cout << "Average Wait Time = " << (tat - totBurst)/input.size();
+    //cout << "Average Turn Around Time = " << tat/input.size();
+    cout << "\t";
+    cout << "Average Wait Time = " << (totalTime - totBurst)/input.size();
 }

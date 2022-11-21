@@ -14,7 +14,7 @@ struct Node {
     int deadlineValue; // deadline
     int ioValue; //io
     int age; 
-    int basePriority;
+    const int basePriority = priority;
     Node *parent; // parent pointer
     Node *left; // left child pointer
     Node *right; // right child pointer
@@ -287,7 +287,7 @@ struct Node {
         TNULL->left = nullptr;
         TNULL->right = nullptr;
         root = TNULL;
-        cout << "TNULL (constructor): " << TNULL << endl;
+        //cout << "TNULL (constructor): " << TNULL << endl;
     }
 
     void RBTree::preOrder() {
@@ -407,6 +407,14 @@ struct Node {
 
     int RBTree::returnBasePriority(NodePtr node) {
         return node->basePriority;
+    }
+
+    int RBTree::returnDeadline(NodePtr node) {
+        return node->deadlineValue;
+    }
+
+    int RBTree::returnIo(NodePtr node) {
+        return node->ioValue;
     }
 
     int * RBTree::exportProcess(NodePtr node) {
