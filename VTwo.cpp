@@ -86,17 +86,16 @@ int scheduler(vector<vector<int>> processes){
 
         if(CPU.empty() && queue.getRoot() != queue.TNULL){ //start running process with highest priority
             NodePtr temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
-            CPU.push_back(*queue.exportProcess(temp));
-            CPU.push_back(*queue.exportProcess(temp)+1);
-            CPU.push_back(*queue.exportProcess(temp)+2);
-            CPU.push_back(*queue.exportProcess(temp)+3);
-            CPU.push_back(*queue.exportProcess(temp)+4);
-            CPU.push_back(*queue.exportProcess(temp)+5);
+            CPU.push_back(*(queue.exportProcess(temp)));
+            CPU.push_back(*(queue.exportProcess(temp)+1));
+            CPU.push_back(*(queue.exportProcess(temp)+2));
+            CPU.push_back(*(queue.exportProcess(temp)+3));
+            CPU.push_back(*(queue.exportProcess(temp)+4));
+            CPU.push_back(*(queue.exportProcess(temp)+5));
 
-            CPU.push_back(clockticks +tq);
-            
   	        list.deleteNode(list.getOffsetByID(CPU[0]));
-            //queue.deleteNode(temp);
+            queue.deleteNode(temp);
+            queue.formatPrint();
             
             CPU.push_back(clockticks + tq);
 		
@@ -113,6 +112,7 @@ int scheduler(vector<vector<int>> processes){
         }
 
         if(!CPU.empty()){ //Process is currently running
+            queue.formatPrint();
             if(CPU[1] == 0){  //process finishes
                 #ifdef DBUG
                    if(printer == true){
@@ -124,16 +124,17 @@ int scheduler(vector<vector<int>> processes){
                     }
                         cout << " Process " << CPU[0] << " finishes running" << '\n';
                 #endif
-		        tat = tat + (clockticks - CPU[2]); 
-                //queue.deleteNode(queue.searchTree(CPU[0]));
+		        //tat = tat + (clockticks - CPU[2]); 
+                queue.deleteNode(queue.searchTree(CPU[0]));
                 CPU.clear();               
             }
             else{  //decrement burst
-                int temp = CPU[1];
-                CPU[1] = temp--;
+                int temp = CPU[1]-1;
+                CPU[1] = temp;
+                cout << "Burst: " << CPU[1] << endl;
             }
 		
-            if(CPU[6] == clockticks){ //time quantum expires
+            if(!CPU.empty() && CPU[6] == clockticks && CPU[1] > 0){ //time quantum expires
                 #ifdef DBUG
                     if(printer == true){
                         cout << "Clock Tick " << clockticks << ": |";
@@ -149,8 +150,8 @@ int scheduler(vector<vector<int>> processes){
 		        int currentPID = CPU[0];
 		        int pri = CPU[3];
                 CPU[3] = pri - 10;
-                //queue.deleteNode(queue.searchTree(currentPID));
-                //list.deleteNode(1);
+                queue.deleteNode(queue.searchTree(currentPID));
+                list.deleteNode(1);
                 queue.insert(
                     CPU[0],
                     CPU[1],
@@ -226,7 +227,7 @@ int scheduler(vector<vector<int>> processes){
                                     };
                 int pri = pvalues[3];
                 pvalues[3] = pri + 10;
-                //queue.deleteNode(queue.searchTree(process));
+                queue.deleteNode(queue.searchTree(process));
                 list.deleteNode(1);
                 queue.insert(
                     pvalues[0],
@@ -263,6 +264,7 @@ int main(int argc,  char **argv){
     vector<vector<int>> input = readInput(processes);
     
     sort(input.begin(), input.end(), compareArrival);
+    //cout << input.size() << endl;
 
     int startTime = input[0][2];
 
