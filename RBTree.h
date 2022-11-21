@@ -12,7 +12,7 @@ class RBTree {
 private:
 
     NodePtr root;
-    NodePtr TNULL;
+    
     bool found = false;
     
 
@@ -31,6 +31,7 @@ private:
 
 public:
 
+    NodePtr TNULL;
     NodePtr queriedNode;
 
     RBTree();

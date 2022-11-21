@@ -71,15 +71,15 @@ struct Node {
             //cout << "inputted id: " << id << endl;
             if (node->pid == id) {
                 found = true;
-                cout << "found " << id << endl;
+                //cout << "found " << id << endl;
                 queriedNode = node;
                 return node;
             }
             searchTreeRec(node->left, id);
             searchTreeRec(node->right, id);
         } else {
-            cout << "going up.." << endl;
-            cout << "node pid (searchTreeRec): " << queriedNode->pid << endl;
+            // cout << "going up.." << endl;
+            // cout << "node pid (searchTreeRec): " << queriedNode->pid << endl;
             return queriedNode;
         }
         return NULL;
