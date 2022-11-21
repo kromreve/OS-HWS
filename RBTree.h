@@ -31,7 +31,7 @@ private:
 
 public:
 
-    NodePtr queriedNode;
+    NodePtr queriedNode = nullptr;
 
     RBTree();
     void preOrder();
@@ -48,6 +48,7 @@ public:
     NodePtr getTopNode();
     int * exportProcess(NodePtr node);
     void insert(int id, int bst, int avl, int pri, int dln, int io);
+    void printProcess(NodePtr node);
     NodePtr getRoot();
     void deleteNode(NodePtr node);
     void formatPrint();
