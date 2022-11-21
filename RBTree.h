@@ -5,13 +5,16 @@ using std::string;
 #define TREE_H
 
 struct Node;
-typedef Node *NodePtr;
+typedef Node* NodePtr;
+
 class RBTree {
-    
+
 private:
 
     NodePtr root;
     NodePtr TNULL;
+    bool found = false;
+    
 
     void createEmptyNode(NodePtr node, NodePtr parent);
     void preOrderRec(NodePtr node);
@@ -27,6 +30,8 @@ private:
     void printRec(NodePtr root, string indent, bool last);
 
 public:
+
+    NodePtr queriedNode;
 
     RBTree();
     void preOrder();

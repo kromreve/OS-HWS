@@ -62,12 +62,24 @@ struct Node {
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
-        if (node != TNULL) {
-            searchTreeRec(node->left, id);
+        
+        //cout << "Node: " << node << endl;
+        //cout << "TNULL: " << TNULL << endl;
+        if (node != TNULL && !found) {
+            //cout << "node pid: " << node->pid << endl;
+            //cout << "inputted id: " << id << endl;
             if (node->pid == id) {
+                found = true;
+                cout << "found " << id << endl;
+                queriedNode = node;
                 return node;
             }
+            searchTreeRec(node->left, id);
             searchTreeRec(node->right, id);
+        } else {
+            cout << "going up.." << endl;
+            cout << "node pid (searchTreeRec): " << queriedNode->pid << endl;
+            return queriedNode;
         }
         
     }
@@ -151,8 +163,11 @@ struct Node {
 
     void RBTree::deleteNodeRec(NodePtr node) {
         //NodePtr z = TNULL;
+        cout << "pid is: " << node->pid << endl;
         NodePtr z = node;
         NodePtr x, y;
+
+        int count = 0;
         // while (node != TNULL) {
         //     if (node->priority == pri && node->pid == id) {
         //         z = node;
@@ -164,7 +179,9 @@ struct Node {
         //         node = node->left;
         //     }
         // }
-
+        count++;
+        cout << "z is: " << z << ". iterated " << count << " times." << endl;
+        cout << "TNULL: " << TNULL << endl;
         if (z == TNULL) {
             cout<<"No key found"<<endl;
             return;
@@ -259,7 +276,7 @@ struct Node {
             }
 
             string sColor = root->color?"RED":"BLACK";
-            cout<<root->priority<<"("<<sColor<<")"<<endl;
+            cout<<root->priority<<"("<<sColor<<")"<<root->pid<<endl;
             printRec(root->left, indent, false);
             printRec(root->right, indent, true);
         }
@@ -272,6 +289,7 @@ struct Node {
         TNULL->left = nullptr;
         TNULL->right = nullptr;
         root = TNULL;
+        cout << "TNULL (constructor): " << TNULL << endl;
     }
 
     void RBTree::preOrder() {
@@ -291,6 +309,7 @@ struct Node {
     }
 
     NodePtr RBTree::searchTree(int id) {
+        found = false;
         return searchTreeRec(this->root, id);
     }
 
