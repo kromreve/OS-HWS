@@ -13,9 +13,9 @@ using namespace std;
 
 int numNegatives = 0;
 int tq;
-int tat;
-int wt;
-int totBurst;
+int tat=0;
+int wt=0;
+int totBurst =0;
 
 
 vector<vector<int>> readInput(const string filename){
@@ -92,6 +92,8 @@ int scheduler(vector<vector<int>> processes){
             CPU.push_back(*queue.exportProcess(temp)+3);
             CPU.push_back(*queue.exportProcess(temp)+4);
             CPU.push_back(*queue.exportProcess(temp)+5);
+
+            CPU.push_back(clockticks +tq);
             
   	        list.deleteNode(list.getOffsetByID(CPU[0]));
             //queue.deleteNode(temp);
@@ -273,6 +275,6 @@ int main(int argc,  char **argv){
     
     cout << "Average Turn Around Time = " << totalTime/input.size();
     // cout << "Average Turn Around Time = " << tat/input.size();
-    // cout << "\t";
-    // cout << "Average Wait Time = " << (tat - totBurst)/input.size();
+    //cout << "\t";
+    //cout << "Average Wait Time = " << (tat - totBurst)/input.size();
 }
