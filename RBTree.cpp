@@ -63,11 +63,10 @@ struct Node {
     }
 
     NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
-        
         //cout << "Node: " << node << endl;
         //cout << "TNULL: " << TNULL << endl;
         if (node != TNULL && !found) {
-            //cout << "node pid: " << node->pid << endl;
+            //cout << "inputed node pid (searchTreeRec): " << node->pid << endl;
             //cout << "inputted id: " << id << endl;
             if (node->pid == id) {
                 found = true;
@@ -77,12 +76,10 @@ struct Node {
             }
             searchTreeRec(node->left, id);
             searchTreeRec(node->right, id);
-        } else {
-            // cout << "going up.." << endl;
-            // cout << "node pid (searchTreeRec): " << queriedNode->pid << endl;
-            return queriedNode;
+        } else if (node == TNULL) {
+            return node;
         }
-        return NULL;
+        return queriedNode;
     }
 
     // NotePtr RBTree::getLeftmostRec(NodePtr node) {
@@ -164,7 +161,7 @@ struct Node {
 
     void RBTree::deleteNodeRec(NodePtr node) {
         //NodePtr z = TNULL;
-        cout << "pid is: " << node->pid << endl;
+        //cout << "pid is: " << node->pid << endl;
         NodePtr z = node;
         NodePtr x, y;
 
@@ -181,8 +178,8 @@ struct Node {
         //     }
         // }
         count++;
-        cout << "z is: " << z << ". iterated " << count << " times." << endl;
-        cout << "TNULL: " << TNULL << endl;
+        //cout << "z is: " << z << ". iterated " << count << " times." << endl;
+        //cout << "TNULL: " << TNULL << endl;
         if (z == TNULL) {
             cout<<"No key found"<<endl;
             return;
@@ -311,6 +308,7 @@ struct Node {
 
     NodePtr RBTree::searchTree(int id) {
         found = false;
+        queriedNode = TNULL;
         return searchTreeRec(this->root, id);
     }
 

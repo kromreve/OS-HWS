@@ -13,9 +13,9 @@ using namespace std;
 
 int numNegatives = 0;
 int tq;
-int tat;
-int wt;
-int totBurst;
+int tat=0;
+int wt=0;
+int totBurst =0;
 
 
 vector<vector<int>> readInput(const string filename){
@@ -277,6 +277,6 @@ int main(int argc,  char **argv){
     
     cout << "Average Turn Around Time = " << totalTime/input.size();
     // cout << "Average Turn Around Time = " << tat/input.size();
-    // cout << "\t";
-    // cout << "Average Wait Time = " << (tat - totBurst)/input.size();
+    //cout << "\t";
+    //cout << "Average Wait Time = " << (tat - totBurst)/input.size();
 }
