@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "RBTree.h"
 #include "LinkedList.h"
-//#define DBUG
+#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -81,7 +81,7 @@ int scheduler(vector<vector<int>> processes){
     vector<int> CPU;
     bool printer = true;
     NodePtr temp;
-    vector<int> ioWait;
+    vector <vector<int>> ioWait;
    
     
 
@@ -159,15 +159,18 @@ int scheduler(vector<vector<int>> processes){
                         cout << " Process " << CPU[0] << " does I/O" << '\n';
                 #endif
             
-                ioWait.push_back(CPU[0]);
+                CPU[6] = CPU[5] + clockticks;
+
+                ioWait.push_back(CPU);
+                /*ioWait.push_back(CPU[0]);
                 ioWait.push_back(CPU[1]);
                 ioWait.push_back(CPU[2]);
                 ioWait.push_back(CPU[3]);
                 ioWait.push_back(CPU[4]);
                 ioWait.push_back(CPU[5]);
-                ioWait.push_back(clockticks + CPU[5]);
+                ioWait.push_back(clockticks + CPU[5]);*/
 
-                int promotionClockTick=clockticks+CPU[5] +100;
+                int promotionClockTick= CPU[6] +100;
                 int pID = CPU[0];
                
                 list.insertNode(pID, promotionClockTick);
@@ -254,9 +257,10 @@ int scheduler(vector<vector<int>> processes){
         }
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
-           
-            if(!ioWait.empty() && ioWait[6] == clockticks && clockticks !=0){ //io promotion
-                int process = ioWait[0];
+
+           for(int i =0; i<ioWait.size(); i++){
+            if(ioWait[i][6] == clockticks && clockticks !=0){ //io promotion
+                int process = ioWait[i][0];
                 #ifdef DBUG
                     if(printer == true){
                         cout << "Clock Tick " << clockticks << ": |";
@@ -268,24 +272,25 @@ int scheduler(vector<vector<int>> processes){
                     cout << " Process " << process << " is IO promoted" << '\n';
                  #endif
                 
-                int pri = ioWait[3];
-                if(pri + ioWait[5] > 99){
-                    ioWait[3] = 99;
+                int pri = ioWait[i][3];
+                if(pri + ioWait[i][5] > 99){
+                    ioWait[i][3] = 99;
                 } else {
-                    ioWait[3] = pri + ioWait[5];
+                    ioWait[i][3] = pri + ioWait[i][5];
                 }
 
                 queue.insert(
-                    ioWait[0],
-                    ioWait[1],
-                    ioWait[2],
-                    ioWait[3],
-                    ioWait[4],
-                    ioWait[5]
+                    ioWait[i][0],
+                    ioWait[i][1],
+                    ioWait[i][2],
+                    ioWait[i][3],
+                    ioWait[i][4],
+                    ioWait[i][5]
                 );
                 
-                ioWait.clear();
+                ioWait.erase(ioWait.begin());
             }
+           }
             
             //Check linked list to see if last value needs to be promoted
         
@@ -302,13 +307,14 @@ int scheduler(vector<vector<int>> processes){
                     cout << " Process " << process << " is promoted" << '\n';
                 #endif
                 //Extracts the node/process that needs to be promoted
+                NodePtr x = queue.searchTree(process);
                 vector<int> pvalues = {
-                    queue.returnPid(queue.searchTree(process)),
-                    queue.returnBurst(queue.searchTree(process)),
-                    queue.returnArrival(queue.searchTree(process)),
-                    queue.returnPriority(queue.searchTree(process)),
-                    queue.returnDeadline(queue.searchTree(process)),
-                    queue.returnIo(queue.searchTree(process))
+                    queue.returnPid(x),
+                    queue.returnBurst(x),
+                    queue.returnArrival(x),
+                    queue.returnPriority(x),
+                    queue.returnDeadline(x),
+                    queue.returnIo(x)
                 };
                 int pri = pvalues[3];
                 if(pri + 10 > 99){
@@ -316,7 +322,7 @@ int scheduler(vector<vector<int>> processes){
                 } else {
                     pvalues[3] = pri + 10;
                 }
-                queue.deleteNode(queue.searchTree(process));
+                queue.deleteNode(x);
                 list.deleteNode(1);
                 queue.insert(
                     pvalues[0],
