@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "RBTree.h"
 #include "LinkedList.h"
-//#define DBUG
+#define DBUG
 using namespace std;
 
 int numNegatives = 0;
@@ -81,9 +81,13 @@ int scheduler(vector<vector<int>> processes){
     vector<int> CPU;
     bool printer = true;
     NodePtr temp;
+    //NodePtr inCPU;
     
 
     while(1){
+        if(clockticks%100 == 0){
+            cout << "Clocktick: " << clockticks << endl;
+        }
 
         if(CPU.empty() && queue.getRoot() != queue.TNULL){ //start running process with highest priority
             temp = queue.maximum(queue.getRoot()); //add process with highest priority to CPU 
@@ -101,6 +105,8 @@ int scheduler(vector<vector<int>> processes){
             
             //cout << "Process ID to go into CPU: " << CPU[0] << endl;
   	        list.deleteNode(list.getOffsetByID(CPU[0]));
+            //inCPU = queue.searchTree(CPU[0]);
+            //queue.deleteNode(inCPU);
             queue.deleteNode(queue.searchTree(CPU[0]));
             //queue.formatPrint();
             
@@ -135,6 +141,7 @@ int scheduler(vector<vector<int>> processes){
                 //queue.deleteNode(queue.searchTree(CPU[0]));
                 CPU.clear();
                 temp = nullptr;
+                //inCPU = nullptr;
                 //cout << "CPU Cleared." << " Size: " << CPU.size() << endl;               
             }
             else{  //decrement burst
@@ -158,6 +165,7 @@ int scheduler(vector<vector<int>> processes){
 		        int promotionClockTick = clockticks + 100;
 		        int currentPID = CPU[0];
 		        int pri = CPU[3];
+                //int basePriTemp = queue.returnBasePriority(inCPU);
                 int basePriTemp = queue.returnBasePriority(queue.searchTree(CPU[0]));
 
                 if(pri - 10 < basePriTemp){
@@ -178,6 +186,7 @@ int scheduler(vector<vector<int>> processes){
                 list.insertNode(currentPID, promotionClockTick);
                 CPU.clear();
                 temp = nullptr;
+                //inCPU = nullptr;
             }
         }
         
@@ -220,6 +229,7 @@ int scheduler(vector<vector<int>> processes){
         }
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
+            
             while(list.getLastClockTick()==clockticks && !list.isEmpty()){
                 int process = list.getLastPID();
                 #ifdef DBUG
@@ -233,13 +243,15 @@ int scheduler(vector<vector<int>> processes){
                     cout << " Process " << process << " is promoted" << '\n';
                 #endif
                 //Extracts the node/process that needs to be promoted
+
+                NodePtr x = queue.searchTree(process);
                 vector<int> pvalues = {
-                    queue.returnPid(queue.searchTree(process)),
-                    queue.returnBurst(queue.searchTree(process)),
-                    queue.returnArrival(queue.searchTree(process)),
-                    queue.returnPriority(queue.searchTree(process)),
-                    queue.returnDeadline(queue.searchTree(process)),
-                    queue.returnIo(queue.searchTree(process))
+                    queue.returnPid(x),
+                    queue.returnBurst(x),
+                    queue.returnArrival(x),
+                    queue.returnPriority(x),
+                    queue.returnDeadline(x),
+                    queue.returnIo(x)
                 };
                 int pri = pvalues[3];
                 if(pri + 10 > 99){
@@ -247,8 +259,16 @@ int scheduler(vector<vector<int>> processes){
                 } else {
                     pvalues[3] = pri + 10;
                 }
-                queue.deleteNode(queue.searchTree(process));
+
+                if(process == 852){
+                    queue.formatPrint();
+                    queue.printProcess(queue.searchTree(process));
+                    queue.printProcess(x);
+                }
+                queue.deleteNode(x);
+
                 list.deleteNode(1);
+
                 queue.insert(
                     pvalues[0],
                     pvalues[1],
@@ -257,9 +277,9 @@ int scheduler(vector<vector<int>> processes){
                     pvalues[4],
                     pvalues[5]
                 );
-                
+                //x = nullptr;
                 int promotionClockTick = clockticks + 100;
-                list.insertNode(pvalues[3], promotionClockTick);
+                list.insertNode(pvalues[0], promotionClockTick);
                 pvalues.clear();
                 }
         }

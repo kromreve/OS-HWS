@@ -165,7 +165,7 @@ struct Node {
         NodePtr z = node;
         NodePtr x, y;
 
-        int count = 0;
+        //int count = 0;
         // while (node != TNULL) {
         //     if (node->priority == pri && node->pid == id) {
         //         z = node;
@@ -177,9 +177,14 @@ struct Node {
         //         node = node->left;
         //     }
         // }
-        count++;
+        //count++;
         //cout << "z is: " << z << ". iterated " << count << " times." << endl;
         //cout << "TNULL: " << TNULL << endl;
+        cout << "First Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        //cout << "x's id is " << x->pid << endl;
+        //cout << "y's id is " << y->pid << endl;
+
         if (z == TNULL) {
             cout<<"No key found"<<endl;
             return;
@@ -210,10 +215,22 @@ struct Node {
             y->left->parent = y;
             y->color = z->color;
         }
+
+        cout << "Second Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        cout << "x's id is " << x->pid << endl;
+        cout << "y's id is " << y->pid << endl;
         delete z;
+
+        cout << "Third Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        cout << "x's id is " << x->pid << endl;
+        cout << "y's id is " << y->pid << endl;
         if (y_og_color == 0){
             delUpdate(x);
         }
+
+
     }
 
     void RBTree::fixInsert(NodePtr k) {
