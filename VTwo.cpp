@@ -259,12 +259,12 @@ int scheduler(vector<vector<int>> processes){
                 } else {
                     pvalues[3] = pri + 10;
                 }
-
-                if(process == 852){
+                #ifdef DBUG
+                if(process == 364 || process == 852 || process == 701){
                     queue.formatPrint();
-                    queue.printProcess(queue.searchTree(process));
                     queue.printProcess(x);
                 }
+                #endif
                 queue.deleteNode(x);
 
                 list.deleteNode(1);
