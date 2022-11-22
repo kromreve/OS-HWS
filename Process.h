@@ -1,6 +1,7 @@
 struct Process {
     int pid, 
-    burst, arrival, 
+    burst, 
+    arrival, 
     priority,
     basePriority, 
     lastRun,
@@ -20,9 +21,9 @@ struct Process {
     {
         pid = 0;
         burst = 0;
+        arrival = 0;
         priority = 0;
         basePriority = 0;
-        arrival = 0;
         lastRun = 0;
         lastMove = 0;
         io = 0;
@@ -34,21 +35,20 @@ struct Process {
     }
     
     //Paremeterized Constructor
-    Process(int id, int bst, int pri, int arvl, int ioTime)
+    Process(int id, int bst, int arvl, int pri, int ioTime)
     {
         pid = id;
         burst = bst;
-        priority = basePriority = pri;
         arrival = lastRun = arvl;
+        priority = basePriority = pri;
         io = ioTime;
-        next = nullptr;
-        prev = nullptr;
-        //kernel = basePriority >=50 ? true : false;
         lastRun = 0;
         lastMove = 0;
         waitTime = 0;
         completionTime = 0;
         waitTot = 0;
+        next = nullptr;
+        prev = nullptr;
     }
 };
 
