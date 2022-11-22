@@ -81,6 +81,7 @@ int scheduler(vector<vector<int>> processes){
     vector<int> CPU;
     bool printer = true;
     NodePtr temp;
+    vector <vector<int>> ioWait;
     //NodePtr inCPU;
     
 
@@ -148,6 +149,30 @@ int scheduler(vector<vector<int>> processes){
                 int temp = CPU[1]-1;
                 CPU[1] = temp;
                 //cout << "Burst: " << CPU[1] << endl;
+            }
+		
+	   if(!CPU.empty() && (CPU[6]-1) == clockticks && CPU[5] > 0){ //does io
+                #ifdef DBUG
+                    if(printer == true){
+                        cout << "Clock Tick " << clockticks << ": |";
+                        printer = false;
+                    }
+                    else{
+                        cout << "\t\t";
+                    }
+                        cout << " Process " << CPU[0] << " does I/O" << '\n';
+                #endif
+            
+                CPU[6] = CPU[5] + clockticks;
+
+                ioWait.push_back(CPU);
+
+                int promotionClockTick= CPU[6] +100;
+                int pID = CPU[0];
+               
+                list.insertNode(pID, promotionClockTick);
+                CPU.clear();
+                
             }
 		
             if(!CPU.empty() && CPU[6] == clockticks && CPU[1] > 0){ //time quantum expires
@@ -229,6 +254,40 @@ int scheduler(vector<vector<int>> processes){
         }
         //Check linked list to see if last value needs to be promoted
         if(!list.isEmpty()){
+		
+	  for(int i =0; i<ioWait.size(); i++){
+            if(ioWait[i][6] == clockticks && clockticks !=0){ //io promotion
+                int process = ioWait[i][0];
+                #ifdef DBUG
+                    if(printer == true){
+                        cout << "Clock Tick " << clockticks << ": |";
+                        printer = false;
+                    }
+                    else{
+                        cout << "\t\t";
+                    }
+                    cout << " Process " << process << " is IO promoted" << '\n';
+                 #endif
+                
+                int pri = ioWait[i][3];
+                if(pri + ioWait[i][5] > 99){
+                    ioWait[i][3] = 99;
+                } else {
+                    ioWait[i][3] = pri + ioWait[i][5];
+                }
+
+                queue.insert(
+                    ioWait[i][0],
+                    ioWait[i][1],
+                    ioWait[i][2],
+                    ioWait[i][3],
+                    ioWait[i][4],
+                    ioWait[i][5]
+                );
+                
+                ioWait.erase(ioWait.begin());
+            }
+           }
             
             while(list.getLastClockTick()==clockticks && !list.isEmpty()){
                 int process = list.getLastPID();
