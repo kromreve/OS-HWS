@@ -2,53 +2,53 @@ struct Process {
     int pid, 
     burst, 
     arrival, 
-    priority,
-    basePriority, 
+    priority, 
     lastRun,
     lastMove, 
     io, 
     waitTime, 
     completionTime, 
-    waitTot; //track waitTime
-    //bool kernel;
+    waitTot,
+    promoteTick;
 
-    //is used in a doubly-linked list
+    //is used in a linked list
     Process* next; 
-    Process* prev;
 
     //Default Contstructor
-    Process()
-    {
-        pid = 0;
-        burst = 0;
-        arrival = 0;
-        priority = 0;
-        basePriority = 0;
-        lastRun = 0;
-        lastMove = 0;
-        io = 0;
-        completionTime = 0;
-        waitTot = 0;
-        waitTot = 0;
-        next = prev = nullptr;
-        //kernel = false;
-    }
+    // Process()
+    // {
+    //     pid = 0;
+    //     burst = 0;
+    //     arrival = 0;
+    //     priority = 0;
+    //     lastRun = 0;
+    //     lastMove = 0;
+    //     io = 0;
+    //     completionTime = 0;
+    //     waitTot = 0;
+    //     promoteTick = 0;
+    //     const int basePriority = 0;
+
+    //     next = nullptr;
+    // }
     
-    //Paremeterized Constructor
+    //Constructor
     Process(int id, int bst, int arvl, int pri, int ioTime)
     {
         pid = id;
         burst = bst;
         arrival = lastRun = arvl;
-        priority = basePriority = pri;
+        priority = pri;
         io = ioTime;
         lastRun = 0;
         lastMove = 0;
         waitTime = 0;
         completionTime = 0;
         waitTot = 0;
+        promoteTick = arrival + 100;
+        const int basePriority = priority;
+
         next = nullptr;
-        prev = nullptr;
     }
 };
 

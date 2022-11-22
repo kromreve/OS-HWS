@@ -4,7 +4,8 @@
 #include <vector>
 #include <regex>
 #include <sstream>
-#include "Process.h"
+#include "RedBlackTree.h"
+#include "Queue.h"
 using namespace std;
 
 int tq;
@@ -82,12 +83,30 @@ int main(int argc,  char **argv){
     cin >> tq;
     
     print(input);
+    RBTree treeList;
+    QueueList queue[100];
+    cout << "queue created" << endl;
+    for (int i=1;i<100;i++) {
+        cout << "i=" << i << endl;
+        queue[i] = QueueList(i);
+    }
+    input[1].arrival
+    queue[1].insertProcess(&input[1]);
+    queue[1].isEmpty();
+    queue[1].printList();
+    queue[2].printList();
+    
+    
+
+    
+    
+
     //scheduler(input);
     //double endTime = scheduler(input);
     //double totalTime = endTime - startTime;
     
     //cout << "Average Turn Around Time = " << totalTime/input.size();
     //cout << "Average Turn Around Time = " << tat/input.size();
-    cout << "\t";
+    //cout << "\t";
     //cout << "Average Wait Time = " << (totalTime - totBurst)/input.size();
 }

@@ -5,24 +5,24 @@ using std::string;
 #define TREE_H
 
 struct Node;
-typedef Node *NodePtr;
+typedef Node *QueuePtr;
 class RBTree {
     
 private:
 
-    NodePtr root;
-    NodePtr TNULL;
+    QueuePtr root;
+    QueuePtr TNULL;
 
-    void initializeNULLNode(NodePtr node, NodePtr parent);
-    void preOrderHelper(NodePtr node);
-    void inOrderHelper(NodePtr node);
-    void postOrderHelper(NodePtr node);
-    NodePtr searchTreeHelper(NodePtr node, int key);
-    void fixDelete(NodePtr x);
-    void rbTransplant(NodePtr u, NodePtr v);
-    void deleteNodeHelper(NodePtr node, int key);
-    void fixInsert(NodePtr k);
-    void printRec(NodePtr root, string indent, bool last);
+    void initializeNULLNode(QueuePtr node, QueuePtr parent);
+    void preOrderHelper(QueuePtr node);
+    void inOrderHelper(QueuePtr node);
+    void postOrderHelper(QueuePtr node);
+    QueuePtr searchTreeHelper(QueuePtr node, int key);
+    void fixDelete(QueuePtr x);
+    void rbTransplant(QueuePtr u, QueuePtr v);
+    void deleteNodeHelper(QueuePtr node, int key);
+    void fixInsert(QueuePtr k);
+    void printRec(QueuePtr root, string indent, bool last);
 
 public:
    
@@ -31,15 +31,15 @@ public:
     void inOrder();
     void postOrder();
     void priorityOrder();
-    NodePtr searchTree(int pri);
-    NodePtr minimum(NodePtr node);
-    NodePtr maximum(NodePtr node);
-    NodePtr successor(NodePtr x);
-    NodePtr predecessor(NodePtr x);
-    void leftRotate(NodePtr x);
-    void rightRotate(NodePtr x);
+    QueuePtr searchTree(int pri);
+    QueuePtr minimum(QueuePtr node);
+    QueuePtr maximum(QueuePtr node);
+    QueuePtr successor(QueuePtr x);
+    QueuePtr predecessor(QueuePtr x);
+    void leftRotate(QueuePtr x);
+    void rightRotate(QueuePtr x);
     void insert(int pri);
-    NodePtr getRoot();
+    QueuePtr getRoot();
     void deleteNode(int value);
     void formatPrint();
 };
