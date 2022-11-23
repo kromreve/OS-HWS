@@ -1,4 +1,3 @@
-
 //Red Black Tree
 //Jacob Weber
 #include "RBTree.h"
@@ -15,7 +14,7 @@ struct Node {
     int deadlineValue; // deadline
     int ioValue; //io
     int age; 
-    int basePriority;
+    const int basePriority = priority;
     Node *parent; // parent pointer
     Node *left; // left child pointer
     Node *right; // right child pointer
@@ -54,24 +53,40 @@ struct Node {
         }
     }
 
-    void RBTree::priorityOrderRec(NodePtr node) {
+    NodePtr RBTree::priorityOrderRec(NodePtr node) {
         if (node != TNULL) {
             priorityOrderRec(node->right);
-            cout << node->priority << " ";
+            return node;
             priorityOrderRec(node->left);
         }
+        return NULL;
     }
 
-    NodePtr RBTree::searchTreeRec(NodePtr node, int key) {
-        if (node == TNULL || key == node->priority) {
+    NodePtr RBTree::searchTreeRec(NodePtr node, int id) {
+        //cout << "Node: " << node << endl;
+        //cout << "TNULL: " << TNULL << endl;
+        if (node != TNULL && !found) {
+            //cout << "inputed node pid (searchTreeRec): " << node->pid << endl;
+            //cout << "inputted id: " << id << endl;
+            if (node->pid == id) {
+                found = true;
+                //cout << "found " << id << endl;
+                queriedNode = node;
+                return node;
+            }
+            searchTreeRec(node->left, id);
+            searchTreeRec(node->right, id);
+        } else if (node == TNULL) {
             return node;
         }
-
-        if (key < node->priority) {
-            return searchTreeRec(node->left, key);
-        }
-        return searchTreeRec(node->right, key);
+        return queriedNode;
     }
+
+    // NotePtr RBTree::getLeftmostRec(NodePtr node) {
+    //     if (node != TNULL) {
+    //         getLeftmostRec(node->left);
+    //     }
+    // }
 
     void RBTree::delUpdate(NodePtr x) {
         NodePtr s;
@@ -144,21 +159,27 @@ struct Node {
         v->parent = u->parent;
     }
 
-    void RBTree::deleteNodeRec(NodePtr node, int key) {
-        NodePtr z = TNULL;
+    void RBTree::deleteNodeRec(NodePtr node) {
+        //NodePtr z = TNULL;
+        //cout << "pid is: " << node->pid << endl;
+        NodePtr z = node;
         NodePtr x, y;
-        while (node != TNULL) {
-            if (node->priority == key) {
-                z = node;
-            }
 
-            if (node->priority <= key) {
-                node = node->right;
-            } else {
-                node = node->left;
-            }
-        }
+        int count = 0;
+        // while (node != TNULL) {
+        //     if (node->priority == pri && node->pid == id) {
+        //         z = node;
+        //     }
 
+        //     if (node->priority <= pri) {
+        //         node = node->right;
+        //     } else {
+        //         node = node->left;
+        //     }
+        // }
+        count++;
+        //cout << "z is: " << z << ". iterated " << count << " times." << endl;
+        //cout << "TNULL: " << TNULL << endl;
         if (z == TNULL) {
             cout<<"No key found"<<endl;
             return;
@@ -253,7 +274,7 @@ struct Node {
             }
 
             string sColor = root->color?"RED":"BLACK";
-            cout<<root->priority<<"("<<sColor<<")"<<endl;
+            cout<<root->priority<<"("<<sColor<<")"<<root->pid<<endl;
             printRec(root->left, indent, false);
             printRec(root->right, indent, true);
         }
@@ -266,6 +287,7 @@ struct Node {
         TNULL->left = nullptr;
         TNULL->right = nullptr;
         root = TNULL;
+        //cout << "TNULL (constructor): " << TNULL << endl;
     }
 
     void RBTree::preOrder() {
@@ -280,12 +302,14 @@ struct Node {
         postOrderRec(this->root);
     }
 
-    void RBTree::priorityOrder() {
-        priorityOrderRec(this->root);
+    NodePtr RBTree::priorityOrder() {
+        return priorityOrderRec(this->root);
     }
 
-    NodePtr RBTree::searchTree(int k) {
-        return searchTreeRec(this->root, k);
+    NodePtr RBTree::searchTree(int id) {
+        found = false;
+        queriedNode = TNULL;
+        return searchTreeRec(this->root, id);
     }
 
     NodePtr RBTree::minimum(NodePtr node) {
@@ -365,6 +389,46 @@ struct Node {
         x->parent = y;
     }
 
+    int RBTree::returnPid(NodePtr node) {
+        return node->pid;
+    }
+
+    int RBTree::returnBurst(NodePtr node) {
+        return node->burst;
+    }
+
+    int RBTree::returnArrival(NodePtr node) {
+        return node->arrivalValue;
+    }
+
+    int RBTree::returnPriority(NodePtr node) {
+        return node->priority;
+    }
+
+    int RBTree::returnBasePriority(NodePtr node) {
+        return node->basePriority;
+    }
+
+    int RBTree::returnDeadline(NodePtr node) {
+        return node->deadlineValue;
+    }
+
+    int RBTree::returnIo(NodePtr node) {
+        return node->ioValue;
+    }
+
+    int * RBTree::exportProcess(NodePtr node) {
+        static int pList[6] = {
+            node->pid, 
+            node->burst,
+            node->arrivalValue,
+            node->priority,
+            node->deadlineValue,
+            node->ioValue
+        };
+        return pList;
+    }
+
     void RBTree::insert(int id, int bst, int avl, int pri, int dln, int io) {
         NodePtr node = new Node;
         node->parent = nullptr;
@@ -411,12 +475,21 @@ struct Node {
         fixInsert(node);
     }
 
+    void RBTree::printProcess(NodePtr node) {
+        cout << "printProcess called." << endl;
+        cout << "Node #" << node->pid << endl;
+        cout << "Burst: " << node->burst << endl;
+        cout << "Arrival: " << node->arrivalValue << endl;
+        cout << "Priority: " << node->priority << endl;
+        cout << "IO: " << node->ioValue << endl;
+    }
+
     NodePtr RBTree::getRoot() {
         return this->root;
     }
 
-    void RBTree::deleteNode(int value) {
-        deleteNodeRec(this->root, value);
+    void RBTree::deleteNode(NodePtr node) {
+        deleteNodeRec(node);
     }
 
     void RBTree::formatPrint() {
