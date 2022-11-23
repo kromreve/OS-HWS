@@ -2,7 +2,7 @@ G++_FLAGS=
 
 
 scheduler:
-	g++ ${G++_FLAGS} main.cpp -o bin/main.out
+	g++ ${G++_FLAGS} main.cpp Queue.cpp -o bin/main.out
 
 clean:
 	if [ -f bin/main.out ]; then rm bin/main.out; fi
