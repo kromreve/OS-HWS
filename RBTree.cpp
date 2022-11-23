@@ -3,6 +3,7 @@
 #include "RBTree.h"
 #include <iostream>
 #include <string>
+//#define T_DBUG
 using namespace std;
 
 
@@ -90,6 +91,10 @@ struct Node {
 
     void RBTree::delUpdate(NodePtr x) {
         NodePtr s;
+        #ifdef T_DBUG
+        printProcess(s);
+        cout << "Address of x (1): " << x << endl;
+        #endif
         while (x != root && x->color == 0) {
             if (x == x->parent->left) {
                 s = x->parent->right;
@@ -97,6 +102,11 @@ struct Node {
                     s->color = 0;
                     x->parent->color = 1;
                     leftRotate(x->parent);
+                    #ifdef T_DBUG
+                    printProcess(s);
+                    cout << "Address of x->parent->right: " << x->parent->right << endl;
+                    cout << "Address of s (2): " << s << endl;
+                    #endif
                     s = x->parent->right;
                 }
 
@@ -108,6 +118,10 @@ struct Node {
                         s->left->color = 0;
                         s->color = 1;
                         rightRotate(s);
+                        #ifdef T_DBUG
+                        printProcess(s);
+                        cout << "Address of s (2): " << s << endl;
+                        #endif
                         s = x->parent->right;
                     }
 
@@ -123,6 +137,10 @@ struct Node {
                     s->color = 0;
                     x->parent->color = 1;
                     rightRotate(x->parent);
+                    #ifdef T_DBUG
+                    printProcess(s);
+                    cout << "Address of s (2): " << s << endl;
+                    #endif
                     s = x->parent->left;
                 }
 
@@ -134,7 +152,15 @@ struct Node {
                         s->right->color = 0;
                         s->color = 1;
                         leftRotate(s);
+                        #ifdef T_DBUG
+                        printProcess(s);
+                        cout << "Address of s (2): " << s << endl;
+                        #endif
                         s = x->parent->left;
+                        #ifdef T_DBUG
+                        printProcess(s);
+                        cout << "Address of s (2): " << s << endl;
+                        #endif
                     }
 
                     s->color = x->parent->color;
@@ -165,7 +191,7 @@ struct Node {
         NodePtr z = node;
         NodePtr x, y;
 
-        int count = 0;
+        //int count = 0;
         // while (node != TNULL) {
         //     if (node->priority == pri && node->pid == id) {
         //         z = node;
@@ -177,9 +203,15 @@ struct Node {
         //         node = node->left;
         //     }
         // }
-        count++;
+        //count++;
         //cout << "z is: " << z << ". iterated " << count << " times." << endl;
         //cout << "TNULL: " << TNULL << endl;
+        #ifdef T_DBUG
+        cout << "First Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        cout << "x's id is " << x->pid << endl;
+        #endif
+
         if (z == TNULL) {
             cout<<"No key found"<<endl;
             return;
@@ -210,10 +242,26 @@ struct Node {
             y->left->parent = y;
             y->color = z->color;
         }
+        
         delete z;
+        
         if (y_og_color == 0){
+            #ifdef T_DBUG
+        cout << "Second Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        cout << "x's id is " << x->pid << endl;
+        cout << "y's id is " << y->pid << endl;
+        #endif
             delUpdate(x);
+            #ifdef T_DBUG
+        cout << "Third Instance: " << endl;
+        cout << "z's id is " << z->pid << endl;
+        cout << "x's id is " << x->pid << endl;
+        cout << "y's id is " << y->pid << endl;
+        #endif
         }
+
+
     }
 
     void RBTree::fixInsert(NodePtr k) {
@@ -287,7 +335,10 @@ struct Node {
         TNULL->left = nullptr;
         TNULL->right = nullptr;
         root = TNULL;
-        //cout << "TNULL (constructor): " << TNULL << endl;
+
+        #ifdef T_DBUG
+        cout << "TNULL (constructor): " << TNULL << endl;
+        #endif
     }
 
     void RBTree::preOrder() {
