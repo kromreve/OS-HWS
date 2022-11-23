@@ -2,8 +2,8 @@
 // Author: Algorithm Tutor
 // Tutorial URL: https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
 
-#include "Queue.h"
 #include <iostream>
+#include "Queue.h"
 
 using namespace std;
 
@@ -16,7 +16,7 @@ private:
 	// initializes the nodes with appropirate values
 	// all the pointers are set to point to the null pointer
 	void initializeNULLNode(QueuePtr node, QueuePtr parent) {
-		node->pri = 0;
+		node->priority = 0;
 		node->parent = parent;
 		node->left = nullptr;
 		node->right = nullptr;
@@ -25,7 +25,7 @@ private:
 
 	void preOrderHelper(QueuePtr node) {
 		if (node != TNULL) {
-			cout<<node->pri<<" ";
+			cout<<node->priority<<" ";
 			preOrderHelper(node->left);
 			preOrderHelper(node->right);
 		} 
@@ -34,7 +34,7 @@ private:
 	void inOrderHelper(QueuePtr node) {
 		if (node != TNULL) {
 			inOrderHelper(node->left);
-			cout<<node->pri<<" ";
+			cout<<node->priority<<" ";
 			inOrderHelper(node->right);
 		} 
 	}
@@ -43,16 +43,16 @@ private:
 		if (node != TNULL) {
 			postOrderHelper(node->left);
 			postOrderHelper(node->right);
-			cout<<node->pri<<" ";
+			cout<<node->priority<<" ";
 		} 
 	}
 
 	QueuePtr searchTreeHelper(QueuePtr node, int key) {
-		if (node == TNULL || key == node->pri) {
+		if (node == TNULL || key == node->priority) {
 			return node;
 		}
 
-		if (key < node->pri) {
+		if (key < node->priority) {
 			return searchTreeHelper(node->left, key);
 		} 
 		return searchTreeHelper(node->right, key);
@@ -144,11 +144,11 @@ private:
 		QueuePtr z = TNULL;
 		QueuePtr x, y;
 		while (node != TNULL){
-			if (node->pri == key) {
+			if (node->priority == key) {
 				z = node;
 			}
 
-			if (node->pri <= key) {
+			if (node->priority <= key) {
 				node = node->right;
 			} else {
 				node = node->left;
@@ -255,7 +255,7 @@ private:
 		   }
             
            string sColor = root->color?"RED":"BLACK";
-		   cout<<root->pri<<"("<<sColor<<")"<<endl;
+		   cout<<root->priority<<"("<<sColor<<")"<<endl;
 		   printHelper(root->left, indent, false);
 		   printHelper(root->right, indent, true);
 		}
@@ -264,7 +264,7 @@ private:
 
 public:
 	RBTree() {
-		TNULL = new QueueNode;
+		TNULL = new QueueList;
 		TNULL->color = 0;
 		TNULL->left = nullptr;
 		TNULL->right = nullptr;
@@ -390,9 +390,9 @@ public:
 	// and fix the tree
 	void insert(int key) {
 		// Ordinary Binary Search Insertion
-		QueuePtr node = new QueueNode;
+		QueuePtr node = new QueueList;
 		node->parent = nullptr;
-		node->pri = key;
+		node->priority = key;
 		node->left = TNULL;
 		node->right = TNULL;
 		node->color = 1; // new node must be red
@@ -402,7 +402,7 @@ public:
 
 		while (x != TNULL) {
 			y = x;
-			if (node->pri < x->pri) {
+			if (node->priority < x->priority) {
 				x = x->left;
 			} else {
 				x = x->right;
@@ -413,7 +413,7 @@ public:
 		node->parent = y;
 		if (y == nullptr) {
 			root = node;
-		} else if (node->pri < y->pri) {
+		} else if (node->priority < y->priority) {
 			y->left = node;
 		} else {
 			y->right = node;

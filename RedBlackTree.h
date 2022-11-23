@@ -1,11 +1,11 @@
 #include <string>
+#include "Queue.h"
 using std::string;
 
 #ifndef TREE_H
 #define TREE_H
 
-struct Node;
-typedef Node *QueuePtr;
+
 class RBTree {
     
 private:

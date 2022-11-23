@@ -1,3 +1,6 @@
+#ifndef PROC_H
+#define PROC_H
+
 struct Process {
     int pid, 
     burst, 
@@ -53,3 +56,5 @@ struct Process {
 };
 
 typedef Process* PPtr;
+
+#endif

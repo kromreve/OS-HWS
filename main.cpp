@@ -5,6 +5,7 @@
 #include <regex>
 #include <sstream>
 #include "RedBlackTree.h"
+#include "Process.h"
 #include "Queue.h"
 using namespace std;
 
@@ -60,8 +61,8 @@ void print(vector<Process> input){
     for(int i = 0; i < input.size(); i++){
         cout << input[i].pid << ": " 
         << input[i].burst << " " 
-        << input[i].priority << " "
         << input[i].arrival << " "
+        << input[i].priority << " "
         << input[i].io << endl;
     }
     cout << '\n';
@@ -87,11 +88,11 @@ int main(int argc,  char **argv){
     QueueList queue[100];
     cout << "queue created" << endl;
     for (int i=1;i<100;i++) {
-        cout << "i=" << i << endl;
+        //cout << "i=" << i << endl;
         queue[i] = QueueList(i);
     }
-    input[1].arrival
-    queue[1].insertProcess(&input[1]);
+    //input[1].arrival;
+    queue[1].insertProcess(&input[0]);
     queue[1].isEmpty();
     queue[1].printList();
     queue[2].printList();
